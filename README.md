@@ -1,5 +1,7 @@
 # WololoGPT
 
+![WololoGPT Logo](./screenshots/wolologpt_logo.png)
+
 ## About the Project
 Visit our official website at [http://wolologpt.com](http://wolologpt.com) to watch the video demo.
 
