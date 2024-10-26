@@ -1,8 +1,10 @@
-# WolologPT
+# WololoGPT
 
 ## About the Project
+Visit our official website at [http://wolologpt.com](http://wolologpt.com) to watch the video demo.
 
-WolologPT is an intelligent assistant for Age of Empires II players, designed to enhance gameplay by providing real-time alerts and insights. This tool helps players manage their resources more effectively, avoid common pitfalls, and improve their overall strategy.
+
+WololoGPT is an intelligent assistant for Age of Empires II players, designed to enhance gameplay by providing real-time alerts and insights. This tool helps players manage their resources more effectively, avoid common pitfalls, and improve their overall strategy.
 
 ## Why It Was Created
 
@@ -10,7 +12,7 @@ As Age of Empires II players ourselves, we recognized the challenge of managing 
 
 ## What It Solves
 
-WolologPT solves several key challenges:
+WololoGPT solves several key challenges:
 
 1. **Resource Management**: Alerts players when resources are floating or when they need to build houses.
 2. **Villager Production**: Reminds players to keep creating villagers throughout the game.
@@ -43,7 +45,7 @@ To run AoE2 Resource Alerts, you need:
 
 ## Required Mods
 
-To get the most out of WolologPT, you need to install the following mods:
+To get the most out of WololoGPT, you need to install the following mods:
 
 - **Anne_HK - Better Resource Panel and Idle Villager Icon**
   This mod enhances the in-game resource panel and adds a clear idle villager icon, which our tool uses for more accurate detection and alerts.
