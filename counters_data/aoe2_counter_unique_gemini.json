@@ -1,0 +1,332 @@
+{
+  "Aztecs": {
+    "unique_units": ["Jaguar Warrior"],
+    "counters": ["Arbalests", "Heavy Crossbowmen", "Hand Cannoneers"],
+    "units_to_avoid": ["Infantry", "Cavalry"],
+    "tips": "Jaguar Warriors are strong against infantry, so ranged units are your best bet."
+  },
+  "Bengalis": {
+    "unique_units": ["Ratha"],
+    "counters": ["Skirmishers", "Heavy Crossbowmen"],
+    "units_to_avoid": ["Arbalests (due to Ratha's high pierce armor)"],
+    "tips": "Rathas are classified as archers, making Skirmishers very effective."
+  },
+  "Berbers": {
+    "unique_units": ["Camel Archer", "Genitour"],
+    "counters": {
+      "Camel Archer": ["Skirmishers", "Arbalests (situational)", "Heavy Siege"],
+      "Genitour": ["Camels", "Heavy Camels", "Skirmishers", "Cavalry"]
+    },
+    "units_to_avoid": {
+      "Camel Archer": ["Heavy Crossbowmen", "Cavalry"],
+      "Genitour": ["None specified"]
+    },
+    "tips": "Use a mix of units to counter the Berbers' versatile roster."
+  },
+  "Bohemians": {
+    "unique_units": ["Houfnice"],
+    "counters": ["None specifically mentioned"],
+    "units_to_avoid": ["None specifically mentioned"],
+    "tips": "Treat the Houfnice like a bombard cannon and counter accordingly."
+  },
+  "Britons": {
+    "unique_units": ["Longbowman"],
+    "counters": ["Fully Upgraded Skirmishers", "Cavalry"],
+    "units_to_avoid": ["Siege Onagers", "Heavy Scorpion (outranged)"],
+    "tips": "Use fast cavalry to close the gap and overwhelm Longbowmen."
+  },
+  "Bulgarians": {
+    "unique_units": ["Konnik"],
+    "counters": ["Halberdiers + Arbalests", "Heavy Crossbowmen"],
+    "units_to_avoid": ["Camels", "Halberdiers alone"],
+    "tips": "Konniks are strong in melee, so a combined arms approach is best."
+  },
+  "Burgundians": {
+    "unique_units": ["Coustillier"],
+    "counters": ["Massed Archers", "Arbalests", "Heavy Crossbowmen"],
+    "units_to_avoid": ["Pikes (early game)", "Cavalry (early game)"],
+    "tips": "Similar to Konniks, use a mix of Halberdiers and ranged units."
+  },
+  "Burmese": {
+    "unique_units": ["Arambai"],
+    "counters": ["Monks (low numbers)", "Skirmishers + Arbalests (spread formation)"],
+    "units_to_avoid": ["Cavalry", "Infantry"],
+    "tips": "Arambai excel at close range, so keep your distance and use ranged units."
+  },
+  "Byzantines": {
+    "unique_units": ["Cataphract"],
+    "counters": ["Monks + Halberdiers/Camels", "Archers", "Heavy Crossbowmen"],
+    "units_to_avoid": ["Camels alone", "Halberdiers alone"],
+    "tips": "Use Monks to convert Cataphracts or focus on ranged units with high pierce armor."
+  },
+  "Celts": {
+    "unique_units": ["Woad Raider"],
+    "counters": ["Heavy Infantry", "Heavy Cavalry", "Heavy Crossbowmen"],
+    "units_to_avoid": ["Archers (can be outrun)"],
+    "tips": "Woad Raiders are fast but fragile, so prioritize units with high damage output."
+  },
+  "Chinese": {
+    "unique_units": ["Chu Ko Nu"],
+    "counters": ["Siege Onagers", "Scorpions", "Arbalests", "Skirmishers"],
+    "units_to_avoid": ["Infantry", "Cavalry"],
+    "tips": "Chu Ko Nus have limited range, so outrange them with siege or massed archers."
+  },
+  "Cumans": {
+    "unique_units": ["Kipchak"],
+    "counters": ["Skirmishers", "Arbalests", "Heavy Siege"],
+    "units_to_avoid": ["Camels"],
+    "tips": "Kipchaks excel against cavalry, so stick to ranged units and siege."
+  },
+  "Dravidians": {
+    "unique_units": ["Urumi Swordsman", "Thirisadai"],
+    "counters": {
+      "Urumi Swordsman": ["Ranged Units"],
+      "Thirisadai": ["Heavy Demolition Ships", "Fast Fire Ships"]
+    },
+    "units_to_avoid": {
+      "Urumi Swordsman": ["Melee Units"],
+      "Thirisadai": ["Galleons"]
+    },
+    "tips": "Urumi Swordsmen are weak to range, while Thirisadai are vulnerable to specialized ships."
+  },
+  "Ethiopians": {
+    "unique_units": ["Shotel Warrior"],
+    "counters": ["Heavy Cavalry", "Heavy Infantry", "Massed Arbalests", "Heavy Crossbowmen"],
+    "units_to_avoid": ["Hand Cannoneers (vulnerable at close range)"],
+    "tips": "Shotel Warriors are fast but squishy, so prioritize units with high damage output."
+  },
+  "Franks": {
+    "unique_units": ["Throwing Axeman"],
+    "counters": ["Arbalests", "Hand Cannoneers", "Cavalry"],
+    "units_to_avoid": ["None specifically mentioned"],
+    "tips": "Throwing Axemen are vulnerable to ranged units, especially those with high pierce armor."
+  },
+  "Goths": {
+    "unique_units": ["Huskarl"],
+    "counters": ["Monks (early game)", "Heavy Infantry", "Heavy Cavalry"],
+    "units_to_avoid": ["Hand Cannoneers (vulnerable at close range)"],
+    "tips": "Use Monks early on, then transition to heavy units to counter massed Huskarls."
+  },
+  "Gurjaras": {
+    "unique_units": ["Shrivansha Rider", "Chakram Thrower"],
+    "counters": {
+      "Shrivansha Rider": ["Camels", "Halberdiers"],
+      "Chakram Thrower": ["Arbalests", "Hand Cannoneers", "Heavy Cavalry"]
+    },
+    "units_to_avoid": {
+      "Shrivansha Rider": ["Ranged Units", "Monks"],
+      "Chakram Thrower": ["Light Cavalry", "Infantry"]
+    },
+    "tips": "Use a mix of units to counter the Gurjaras' unique strengths."
+  },
+  "Hindustanis": {
+    "unique_units": ["Ghulam"],
+    "counters": ["Heavy Cavalry", "Heavy Infantry"],
+    "units_to_avoid": ["Eagle Warriors"],
+    "tips": "Ghulams excel against light infantry and ranged units, so prioritize heavily armored units."
+  },
+  "Huns": {
+    "unique_units": ["Tarkan"],
+    "counters": ["Paladins", "Halberdiers", "Monks (low numbers)"],
+    "units_to_avoid": ["Archers"],
+    "tips": "Tarkans have high pierce armor, so use melee units or Monks to counter them."
+  },
+  "Incas": {
+    "unique_units": ["Kamayuk", "Slinger"],
+    "counters": {
+      "Kamayuk": ["Hand Cannoneers", "Heavy Crossbowmen", "Arbalests"],
+      "Slinger": ["Arbalests", "Skirmishers", "Heavy Cavalry", "Elephant Archers"]
+    },
+    "units_to_avoid": {
+      "Kamayuk": ["Melee Units"],
+      "Slinger": ["None specifically mentioned"]
+    },
+    "tips": "Keep your distance from Kamayuks and use ranged units to take them down."
+  },
+  "Italians": {
+    "unique_units": ["Genoese Crossbowman", "Condottiero"],
+    "counters": {
+      "Genoese Crossbowman": ["Skirmishers", "Arbalests"],
+      "Condottiero": ["Heavy Infantry", "Heavy Cavalry", "Massed Arbalests"]
+    },
+    "units_to_avoid": {
+      "Genoese Crossbowman": ["Cavalry"],
+      "Condottiero": ["Gunpowder Units"]
+    },
+    "tips": "Italians have strong ranged units, so a mix of Skirmishers and heavy units is recommended."
+  },
+  "Japanese": {
+    "unique_units": ["Samurai"],
+    "counters": ["Archers", "Arbalests", "Heavy Crossbowmen"],
+    "units_to_avoid": ["Infantry", "Unique Units"],
+    "tips": "Samurais are vulnerable to ranged attacks, especially those with high pierce armor."
+  },
+  "Khmer": {
+    "unique_units": ["Ballista Elephant"],
+    "counters": ["Monks", "Halberdiers", "Monks + Halberdiers"],
+    "units_to_avoid": ["None specifically mentioned"],
+    "tips": "Use Monks to convert Ballista Elephants or a mix of Monks and Halberdiers to overwhelm them."
+  },
+  "Koreans": {
+    "unique_units": ["War Wagon", "Turtle Ship"],
+    "counters": {
+      "War Wagon": ["Monks", "Heavy Cavalry", "Skirmishers", "Camels"],
+      "Turtle Ship": ["Fire Ships", "Demolition Ships", "Galleons (with caution)"]
+    },
+    "units_to_avoid": {
+      "War Wagon": ["Archers", "Heavy Crossbowmen"],
+      "Turtle Ship": ["None specifically mentioned"]
+    },
+    "tips": "Koreans have strong ranged units, so a mix of Monks, cavalry, and siege is recommended."
+  },
+  "Lithuanians": {
+    "unique_units": ["Leitis"],
+    "counters": ["Ranged Units", "Monks", "Halberdiers"],
+    "units_to_avoid": ["Cavalry", "Camels"],
+    "tips": "Leitis are powerful against cavalry, so prioritize ranged units or Monks."
+  },
+  "Magyars": {
+    "unique_units": ["Magyar Huszar"],
+    "counters": ["Heavy Cavalry", "Halberdiers", "Camels"],
+    "units_to_avoid": ["Siege Units"],
+    "tips": "Magyar Huszars are strong against siege, so use heavy cavalry or Halberdiers to counter them."
+  },
+  "Malay": {
+    "unique_units": ["Karambit Warrior"],
+    "counters": ["Heavy Cavalry", "Heavy Infantry", "Massed Archers"],
+    "units_to_avoid": ["Trash Units", "Small Groups of Units"],
+    "tips": "Karambit Warriors are strong in melee, so use heavy units or massed archers to counter them."
+  },
+  "Malians": {
+    "unique_units": ["Gbeto"],
+    "counters": ["Ranged Units", "Heavy Siege"],
+    "units_to_avoid": ["Infantry", "Cavalry"],
+    "tips": "Gbetos are fast and have high damage output, so keep your distance and use ranged units."
+  },
+  "Mayans": {
+    "unique_units": ["Plumed Archer"],
+    "counters": ["Siege Onagers", "Heavy Scorpions", "Heavy Cavalry", "Skirmishers"],
+    "units_to_avoid": ["Arbalests", "Infantry"],
+    "tips": "Mayans lack Redemption and Bombard Cannon, making Siege Onagers and Scorpions very effective."
+  },
+  "Mongols": {
+    "unique_units": ["Mangudai"],
+    "counters": ["Skirmishers", "Arbalests"],
+    "units_to_avoid": ["Heavy Camels", "Heavy Cavalry", "Infantry"],
+    "tips": "Mangudai are strong against cavalry and infantry, so prioritize ranged units."
+  },
+  "Persians": {
+    "unique_units": ["War Elephant"],
+    "counters": ["Halberdiers", "Monks"],
+    "units_to_avoid": ["None specifically mentioned"],
+    "tips": "Use the classic Halberdier and Monk combination to counter War Elephants."
+  },
+  "Poles": {
+    "unique_units": ["Obuch", "Winged Hussar"],
+    "counters": {
+      "Obuch": ["Hand Cannoneers", "Arbalests"],
+      "Winged Hussar": ["Halberdiers", "Massed Archers"]
+    },
+    "units_to_avoid": {
+      "Obuch": ["Melee Units"],
+      "Winged Hussar": ["None specifically mentioned"]
+    },
+    "tips": "Obuchs are strong in melee, so use ranged units to counter them. Winged Hussars are vulnerable to massed archers and Halberdiers."
+  },
+  "Portuguese": {
+    "unique_units": ["Organ Gun", "Caravel"],
+    "counters": {
+      "Organ Gun": ["Monks with Redemption", "Heavy Siege", "Long-Range Archers"],
+      "Caravel": ["Fast Fire Ships", "Demolition Ships"]
+    },
+    "units_to_avoid": {
+      "Organ Gun": ["None specifically mentioned"],
+      "Caravel": ["Galleons"]
+    },
+    "tips": "Portuguese rely on their powerful late-game units. Pressure them early on and use the recommended counters to deal with their unique strengths."
+  },
+  "Romans": {
+    "unique_units": ["Legionary", "Centurion"],
+    "counters": {
+      "Legionary": ["Counters to Champions"],
+      "Centurion": ["Monks (Castle Age)", "Halberdiers", "Heavy Camels"]
+    },
+    "units_to_avoid": {
+      "Legionary": ["None specifically mentioned"],
+      "Centurion": ["Ranged Units"]
+    },
+    "tips": "Legionaries are similar to Champions, while Centurions are strong in melee and best countered by Monks or heavy units."
+  },
+  "Saracens": {
+    "unique_units": ["Mameluke"],
+    "counters": ["Arbalests", "Monks + Halberdiers", "Heavy Siege (with caution)"],
+    "units_to_avoid": ["Cavalry"],
+    "tips": "Mamelukes can be overwhelming in large numbers, so prioritize Arbalests or a mix of Monks and Halberdiers."
+  },
+  "Sicilians": {
+    "unique_units": ["Serjeant"],
+    "counters": ["Heavy Infantry", "Heavy Cavalry", "Massed Arbalests", "Heavy Crossbowmen"],
+    "units_to_avoid": ["Trash Units", "Small Groups of Units"],
+    "tips": "Serjeants have low DPS, so use heavy units or massed archers to overwhelm them."
+  },
+  "Slavs": {
+    "unique_units": ["Boyar"],
+    "counters": ["Halberdiers", "Heavy Camels"],
+    "units_to_avoid": ["Most Melee Units (except Halberdiers and Heavy Camels)"],
+    "tips": "Boyars are strong against most melee units, so prioritize Halberdiers or Heavy Camels."
+  },
+  "Spanish": {
+    "unique_units": ["Conquistador", "Missionary"],
+    "counters": {
+      "Conquistador": ["Skirmishers", "Heavy Camels", "Arbalests"],
+      "Missionary": ["Light Cavalry", "Archers", "Skirmishers"]
+    },
+    "units_to_avoid": {
+      "Conquistador": ["None specifically mentioned"],
+      "Missionary": ["None specifically mentioned"]
+    },
+    "tips": "Conquistadors are vulnerable to Skirmishers, while Missionaries are weak to fast units."
+  },
+  "Tatars": {
+    "unique_units": ["Keshik", "Flaming Camel"],
+    "counters": {
+      "Keshik": ["Halberdiers", "Heavy Camels"],
+      "Flaming Camel": ["Ranged Units"]
+    },
+    "units_to_avoid": {
+      "Keshik": ["Knights", "Light Cavalry"],
+      "Flaming Camel": ["None specifically mentioned"]
+    },
+    "tips": "Keshiks are strong against cavalry, so use Halberdiers or Heavy Camels. Flaming Camels are vulnerable to ranged attacks."
+  },
+  "Teutons": {
+    "unique_units": ["Teutonic Knight"],
+    "counters": ["Hand Cannoneers", "Arbalests", "Heavy Crossbowmen", "Heavy Siege"],
+    "units_to_avoid": ["Most Melee Units"],
+    "tips": "Teutonic Knights are very strong in melee, so prioritize ranged units or heavy siege."
+  },
+  "Turks": {
+    "unique_units": ["Janissary"],
+    "counters": ["Arbalests", "Heavy Crossbowmen", "Skirmishers"],
+    "units_to_avoid": ["Siege Onagers"],
+    "tips": "Janissaries are powerful but vulnerable to ranged units with high pierce armor."
+  },
+  "Vietnamese": {
+    "unique_units": ["Rattan Archer"],
+    "counters": ["Heavy Siege", "Melee Units (situational)", "Skirmishers (situational)"],
+    "units_to_avoid": ["Arbalests", "Heavy Crossbowmen"],
+    "tips": "Rattan Archers have high pierce armor, making them resistant to ranged attacks. Use heavy siege or overwhelm them with melee units."
+  },
+  "Vikings": {
+    "unique_units": ["Berserk", "Longboat"],
+    "counters": {
+      "Berserk": ["Arbalests", "Hand Cannoneers", "Heavy Crossbowmen", "Elephant Archers"],
+      "Longboat": ["Galleons (generally even)", "Thirisadai (Dravidian unique unit)", "Caravel (Portuguese unique unit)"]
+    },
+    "units_to_avoid": {
+      "Berserk": ["None specifically mentioned"],
+      "Longboat": ["None specifically mentioned"]
+    },
+    "tips": "Berserks are vulnerable to ranged units, while Longboats are generally strong but can be countered by specific unique units."
+  }
+}

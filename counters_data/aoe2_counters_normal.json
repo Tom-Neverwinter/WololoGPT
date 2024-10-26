@@ -1,0 +1,147 @@
+[
+    {
+      "unit": "Archer line",
+      "counter units": ["Skirmishers", "Knights", "Siege (Scorpions, Mangonels, Bombard Cannons)"],
+      "quick summary": "Skirmishers are the best counter. Knights and Siege units also perform well."
+    },
+    {
+      "unit": "Skirmisher line",
+      "counter units": ["Cavalry (Scouts, Knights, Steppe Lancers, Elephants)", "Siege (Mangonels)"],
+      "quick summary": "Cavalry units and Mangonels are effective against Skirmishers."
+    },
+    {
+      "unit": "Hand Cannoneer",
+      "counter units": ["Arbalests", "Skirmishers", "Bombard Cannons", "Siege Rams"],
+      "quick summary": "Use ranged units like Arbalests and Skirmishers. Bombard Cannons and Siege Rams can also be effective."
+    },
+    {
+      "unit": "Cavalry Archer",
+      "counter units": ["Skirmishers", "Camels", "Siege (Scorpions, Onagers)"],
+      "quick summary": "Skirmishers are the primary counter. Camels and Siege units are also effective."
+    },
+    {
+      "unit": "Elephant Archer",
+      "counter units": ["Monks", "Skirmishers", "Halberdiers", "Camels"],
+      "quick summary": "Monks are the best counter. Skirmishers, Halberdiers, and Camels can also be used."
+    },
+    {
+      "unit": "Swordsman line",
+      "counter units": ["Arbalests", "Hand Cannoneers", "Cavalry Archers", "Knights"],
+      "quick summary": "Use ranged units like Arbalests and Hand Cannoneers. Cavalry Archers and Knights are also effective."
+    },
+    {
+      "unit": "Spearman line (Halberdier)",
+      "counter units": ["Archers", "Skirmishers", "Siege (Scorpions, Onagers)", "Militia line"],
+      "quick summary": "Archers and Skirmishers are the best counters. Siege units and Militia line are also effective."
+    },
+    {
+      "unit": "Eagle Warrior",
+      "counter units": ["Swordsman line", "Hand Cannoneers", "Knights"],
+      "quick summary": "Swordsman line and Hand Cannoneers are the best counters. Knights can also be used."
+    },
+    {
+      "unit": "Scout Cavalry line",
+      "counter units": ["Halberdiers", "Archers", "Knights", "Camels"],
+      "quick summary": "Halberdiers are the best counter. Archers, Knights, and Camels are also effective."
+    },
+    {
+      "unit": "Knight line",
+      "counter units": ["Monks", "Halberdiers", "Camels"],
+      "quick summary": "Monks and Halberdiers are the best counters. Camels can also be used."
+    },
+    {
+      "unit": "Camel line",
+      "counter units": ["Halberdiers", "Monks", "Archers", "Heavy Scorpions"],
+      "quick summary": "Halberdiers and Monks are the best counters. Archers and Heavy Scorpions are also effective."
+    },
+    {
+      "unit": "Battle Elephant",
+      "counter units": ["Monks", "Halberdiers", "Camels", "Heavy Scorpions"],
+      "quick summary": "Monks and Halberdiers are the best counters. Camels and Heavy Scorpions can also be used."
+    },
+    {
+      "unit": "Steppe Lancer",
+      "counter units": ["Halberdiers", "Archers", "Knights", "Camels"],
+      "quick summary": "Halberdiers are the best counter. Archers, Knights, and Camels are also effective."
+    },
+    {
+      "unit": "Ram line",
+      "counter units": ["Swordsman line", "Knights", "Halberdiers", "Siege"],
+      "quick summary": "Use melee units like Swordsman line, Knights, and Halberdiers. Siege units are also effective."
+    },
+    {
+        "unit": "Siege Elephant",
+        "counter units": ["Halberdiers", "Camels", "Melee units"],
+        "quick summary": "Halberdiers and Camels are the best counters. Any melee unit can also be effective."
+      },
+      {
+        "unit": "Onager line",
+        "counter units": ["Bombard Cannons", "Monks", "Cavalry (Light Cavalry, Knights)"],
+        "quick summary": "Bombard Cannons and Monks are the best counters. Cavalry units can also be used."
+      },
+      {
+        "unit": "Scorpion line",
+        "counter units": ["Cavalry (Light Cavalry, Knights)", "Monks", "Bombard Cannons", "Siege Onagers"],
+        "quick summary": "Use fast units like Light Cavalry and Knights. Monks, Bombard Cannons, and Siege Onagers are also effective."
+      },
+      {
+        "unit": "Bombard Cannon",
+        "counter units": ["Cavalry (Light Cavalry, Knights)", "Onagers", "Trebuchets"],
+        "quick summary": "Fast units like Light Cavalry and Knights are effective. Onagers and Trebuchets can also counter."
+      },
+      {
+        "unit": "Trebuchet",
+        "counter units": ["Cavalry (Light Cavalry, Knights)", "Bombard Cannons", "Onagers"],
+        "quick summary": "Use fast units like Light Cavalry and Knights. Bombard Cannons and Onagers are also effective."
+      },
+      {
+        "unit": "Mangonel line",
+        "counter units": ["Bombard Cannons", "Monks", "Cavalry (Light Cavalry, Knights)"],
+        "quick summary": "Bombard Cannons and Monks are the best counters. Cavalry units can also be used."
+      },
+      {
+        "unit": "Petard",
+        "counter units": ["Archers", "Towers", "Castles", "Cavalry"],
+        "quick summary": "Use defensive structures like Towers and Castles. Archers and Cavalry can also counter."
+      },
+      {
+        "unit": "Monk",
+        "counter units": ["Light Cavalry", "Knights", "Archers", "Skirmishers"],
+        "quick summary": "Light Cavalry and Knights are the best counters. Archers and Skirmishers can also be effective."
+      },
+      {
+        "unit": "Trade Cart",
+        "counter units": ["Cavalry", "Archers", "Siege"],
+        "quick summary": "Use fast units like Cavalry and Archers. Siege units can also be effective."
+      },
+      {
+        "unit": "Fishing Ship",
+        "counter units": ["Fire Ships", "Galleys", "Demolition Ships"],
+        "quick summary": "Use naval units like Fire Ships, Galleys, and Demolition Ships."
+      },
+      {
+        "unit": "Transport Ship",
+        "counter units": ["Galleys", "Fire Ships", "Demolition Ships"],
+        "quick summary": "Use naval units like Galleys, Fire Ships, and Demolition Ships."
+      },
+      {
+        "unit": "Galley line",
+        "counter units": ["Fire Ships", "Demolition Ships", "Heavy Demolition Ships"],
+        "quick summary": "Fire Ships and Demolition Ships are the best counters."
+      },
+      {
+        "unit": "Fire Ship line",
+        "counter units": ["Galleys", "Demolition Ships", "Heavy Demolition Ships"],
+        "quick summary": "Galleys and Demolition Ships are the best counters."
+      },
+      {
+        "unit": "Demolition Ship line",
+        "counter units": ["Galleys", "Fire Ships", "Fast Fire Ships"],
+        "quick summary": "Galleys and Fire Ships are the best counters."
+      },
+      {
+        "unit": "Cannon Galleon",
+        "counter units": ["Galleys", "Fire Ships", "Demolition Ships"],
+        "quick summary": "Use naval units like Galleys, Fire Ships, and Demolition Ships."
+      }
+]
