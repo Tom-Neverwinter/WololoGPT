@@ -1,6 +1,6 @@
 # WololoGPT
 
-![WololoGPT Logo](./screenshots/wolologpt_logo.png)
+<img src="https://github.com/tony-png/WololoGPT-1.0.0---Github-Official/blob/main/images/logo.jpg?raw=true" width="200" alt="WololoGPT Logo">
 
 ## About the Project
 Visit our official website at [http://wolologpt.com](http://wolologpt.com) to watch the video demo.
