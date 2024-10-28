@@ -97,7 +97,7 @@ class MainWindow(QWidget):
         self.create_message_area(layout)
         
         # Add version display at the bottom as a clickable link
-        self.version_label = QLabel(f'<a href="https://wolologpt.com">Version: {self.app_version}</a>')
+        self.version_label = QLabel(f'<a href="https://wolologpt.com/?utm_source=program&utm_medium=app_link">Version: {self.app_version}</a>')
         self.version_label.setOpenExternalLinks(True)
         self.version_label.setAlignment(Qt.AlignmentFlag.AlignRight)
         self.version_label.setToolTip("Click to visit wolologpt.com")

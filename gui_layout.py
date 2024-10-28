@@ -34,7 +34,7 @@ def create_main_layout(window):
         layout.addWidget(logo_label)
 
     # Instructions link (moved above API key input)
-    instructions_link = QLabel('Welcome to <b>WololoGPT!</b> <a href="https://wolologpt.com/instructions.html">Instructions</a>')
+    instructions_link = QLabel('Welcome to <b>WololoGPT!</b> <a href="https://wolologpt.com/?utm_source=program&utm_medium=app_link">Click Here for Instructions</a>')
     instructions_link.setOpenExternalLinks(True)
     instructions_link.setAlignment(Qt.AlignmentFlag.AlignCenter)
     layout.addWidget(instructions_link)
@@ -129,5 +129,6 @@ def create_main_layout(window):
     window.idle_villager_audio_checkbox = QCheckBox("Enable Idle Villager Audio Alert", window)
     window.idle_villager_audio_checkbox.setChecked(True)  # Enable by default
     layout.addWidget(window.idle_villager_audio_checkbox)
+
 
     return layout
