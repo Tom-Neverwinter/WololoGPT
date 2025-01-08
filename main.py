@@ -40,6 +40,11 @@ class MainWindow(QWidget):
         self.server_status_timer = None
         self.app_version = "1.0.0"  # Define the app version here
         self.api_key_validated = False  # Add this line to track API key validation status
+        
+        # Initialize hotkeys before initUI
+        self.villager_hotkey = "1"  # Default hotkey
+        self.castle_hotkey = "2"  # Default castle hotkey
+        
         self.initUI()
         self.setup_message_update()
         self.setup_server_status_check()
@@ -59,8 +64,6 @@ class MainWindow(QWidget):
         # Disable Start and Stop buttons initially
         self.start_button.setEnabled(False)
         self.stop_button.setEnabled(False)
-
-        self.villager_hotkey = "1"  # Default hotkey
 
         # Play welcome audio
         AudioManager.play_audio('audio/warnings/welcome.mp3', volume=0.5)
@@ -182,6 +185,7 @@ class MainWindow(QWidget):
         self.start_button.clicked.connect(self.start_resource_alerts)
         self.stop_button.clicked.connect(self.stop_resource_alerts)
         self.villager_checkbox.stateChanged.connect(self.toggle_villager_creation)
+        self.castle_checkbox.stateChanged.connect(self.toggle_castle_unit_creation)
         self.civ_counters_checkbox.stateChanged.connect(self.toggle_civ_counters_hotkey)
         self.color_flash_checkbox.stateChanged.connect(self.toggle_color_flash_alerts)
         self.your_username_save_button.clicked.connect(self.save_your_username)
@@ -190,7 +194,9 @@ class MainWindow(QWidget):
         self.idle_villager_audio_checkbox.stateChanged.connect(self.toggle_idle_villager_audio)
         self.api_key_test_button.clicked.connect(self.test_api_key)
         self.villager_hotkey_input.textChanged.connect(self.update_villager_hotkey)
+        self.castle_hotkey_input.textChanged.connect(self.update_castle_hotkey)
         self.villager_hotkey_input.installEventFilter(self)
+        self.castle_hotkey_input.installEventFilter(self)
 
     def setup_message_update(self):
         """Set up periodic message updates"""
@@ -326,6 +332,10 @@ class MainWindow(QWidget):
             if self.villager_checkbox.isChecked():
                 keyboard.add_hotkey(self.villager_hotkey, GameActions.select_all_tcs_create_one_villager)
             
+            # Set up the castle unit creation hotkey
+            if self.castle_checkbox.isChecked():
+                keyboard.add_hotkey(self.castle_hotkey, GameActions.select_all_castles_create_unique_unit)
+            
             # Set up the civ counters hotkey
             if self.civ_counters_checkbox.isChecked():
                 keyboard.add_hotkey('ctrl+.', lambda: GameActions.show_civs_counters(
@@ -333,7 +343,7 @@ class MainWindow(QWidget):
                     self.teammates_usernames_input.text()
                 ))
             
-            logger.info(f"Hotkeys set up successfully. Villager hotkey: {self.villager_hotkey}")
+            logger.info(f"Hotkeys set up successfully. Villager hotkey: {self.villager_hotkey}, Castle hotkey: {self.castle_hotkey}")
         except Exception as e:
             logger.error(f"Error setting up hotkeys: {str(e)}")
 
@@ -345,7 +355,8 @@ class MainWindow(QWidget):
             "api_key": self.api_key_input.text(),
             "audio_alerts_enabled": self.audio_alerts_checkbox.isChecked(),
             "idle_villager_audio_enabled": self.idle_villager_audio_checkbox.isChecked(),
-            "villager_hotkey": self.villager_hotkey
+            "villager_hotkey": self.villager_hotkey,
+            "castle_hotkey": self.castle_hotkey
         }
         with open("user_info.json", "w") as f:
             json.dump(user_info, f)
@@ -367,9 +378,11 @@ class MainWindow(QWidget):
                 self.audio_alerts_checkbox.setChecked(user_info.get("audio_alerts_enabled", True))
                 self.idle_villager_audio_checkbox.setChecked(user_info.get("idle_villager_audio_enabled", True))
                 
-                # Load villager hotkey
+                # Load hotkeys
                 self.villager_hotkey = user_info.get("villager_hotkey", "1")
                 self.villager_hotkey_input.setText(self.villager_hotkey)
+                self.castle_hotkey = user_info.get("castle_hotkey", "2")
+                self.castle_hotkey_input.setText(self.castle_hotkey)
                 
                 # Don't validate the API key automatically
                 self.api_key_validated = False
@@ -552,15 +565,32 @@ class MainWindow(QWidget):
             self.villager_hotkey_input.setText(self.villager_hotkey)
             logger.warning("Empty villager hotkey input")
 
+    def update_castle_hotkey(self, new_hotkey):
+        """Update the castle unit creation hotkey"""
+        if new_hotkey:
+            old_hotkey = self.castle_hotkey
+            self.castle_hotkey = new_hotkey
+            self.setup_hotkeys()
+            self.save_user_info()
+            logger.info(f"Castle hotkey updated from {old_hotkey} to: {self.castle_hotkey}")
+        else:
+            # If the input is empty, don't update the hotkey
+            self.castle_hotkey_input.setText(self.castle_hotkey)
+            logger.warning("Empty castle hotkey input")
+
     def eventFilter(self, obj, event):
-        if obj == self.villager_hotkey_input and event.type() == QKeyEvent.Type.KeyPress:
+        if (obj == self.villager_hotkey_input or obj == self.castle_hotkey_input) and event.type() == QKeyEvent.Type.KeyPress:
             if event.key() == Qt.Key.Key_Backspace or event.key() == Qt.Key.Key_Delete:
                 # Allow backspace and delete keys to function normally
                 return False
             key = event.text()
             if key:
-                self.villager_hotkey_input.setText(key)
-                self.update_villager_hotkey(key)
+                if obj == self.villager_hotkey_input:
+                    self.villager_hotkey_input.setText(key)
+                    self.update_villager_hotkey(key)
+                else:  # castle_hotkey_input
+                    self.castle_hotkey_input.setText(key)
+                    self.update_castle_hotkey(key)
             return True
         return super().eventFilter(obj, event)
 
@@ -569,6 +599,16 @@ class MainWindow(QWidget):
             self.start_button.setText("Start Resource Alerts")
         else:
             self.start_button.setText("Activate API Key First")
+
+    def toggle_castle_unit_creation(self, state):
+        """Toggle the castle unit creation feature"""
+        if state == Qt.CheckState.Checked.value:
+            GameActions.enable_castle_unit_creation()
+            api_client.create_action("enable_castle_unit_creation", "User enabled auto castle unit creation")
+        else:
+            GameActions.disable_castle_unit_creation()
+            api_client.create_action("disable_castle_unit_creation", "User disabled auto castle unit creation")
+        self.setup_hotkeys()
 
 def is_admin():
     try:

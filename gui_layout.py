@@ -103,12 +103,27 @@ def create_main_layout(window):
 
     window.villager_hotkey_label = QLabel("Hotkey:", window)
     window.villager_hotkey_input = QLineEdit(window)
-    window.villager_hotkey_input.setFixedWidth(50)  # Increased width to accommodate longer keys
-    window.villager_hotkey_input.setMaxLength(10)  # Increased max length for combination keys
+    window.villager_hotkey_input.setFixedWidth(50)
+    window.villager_hotkey_input.setMaxLength(10)
     villager_layout.addWidget(window.villager_hotkey_label)
     villager_layout.addWidget(window.villager_hotkey_input)
 
     layout.addLayout(villager_layout)
+
+    # Castle unit creation checkbox and hotkey input
+    castle_layout = QHBoxLayout()
+    window.castle_checkbox = QCheckBox("Enable Auto Castle Unit Creation", window)
+    window.castle_checkbox.setChecked(True)
+    castle_layout.addWidget(window.castle_checkbox)
+
+    window.castle_hotkey_label = QLabel("Hotkey:", window)
+    window.castle_hotkey_input = QLineEdit(window)
+    window.castle_hotkey_input.setFixedWidth(50)
+    window.castle_hotkey_input.setMaxLength(10)
+    castle_layout.addWidget(window.castle_hotkey_label)
+    castle_layout.addWidget(window.castle_hotkey_input)
+
+    layout.addLayout(castle_layout)
 
     # Civ counters hotkey checkbox
     window.civ_counters_checkbox = QCheckBox("Enable Civ Counters Hotkey (ctrl+.)", window)

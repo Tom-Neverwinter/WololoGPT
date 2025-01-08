@@ -9,6 +9,7 @@ from api_client import api_client
 
 class GameActions:
     villager_creation_enabled = True
+    castle_unit_creation_enabled = True
 
     @staticmethod
     def select_all_tcs_create_one_villager():
@@ -21,6 +22,28 @@ class GameActions:
             keyboard.release('shift')
             keyboard.release('ctrl')
             keyboard.press_and_release('q')  # Create villager
+
+    @staticmethod
+    def select_all_castles_create_unique_unit():
+        """Select all Castles and create one unique unit"""
+        if GameActions.castle_unit_creation_enabled:
+            time.sleep(0.1)
+            keyboard.press('ctrl')
+            keyboard.press('shift')
+            keyboard.press_and_release('c')  # Select all Castles
+            keyboard.release('shift')
+            keyboard.release('ctrl')
+            keyboard.press_and_release('q')  # Create unique unit
+
+    @staticmethod
+    def enable_castle_unit_creation():
+        """Enable automatic castle unit creation"""
+        GameActions.castle_unit_creation_enabled = True
+
+    @staticmethod
+    def disable_castle_unit_creation():
+        """Disable automatic castle unit creation"""
+        GameActions.castle_unit_creation_enabled = False
 
     @staticmethod
     def enable_villager_creation():
