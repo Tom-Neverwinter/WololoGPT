@@ -42,7 +42,7 @@ To run AoE2 Resource Alerts, you need:
    - pyautogui
    - keyboard
    - And other dependencies listed in requirements.txt
-3. Google Cloud Vision API key
+3. ollama and gemma 3 [4B it-qat preferred]
 4. Age of Empires II: Definitive Edition
 
 ## Required Mods
@@ -59,7 +59,7 @@ To get the most out of WololoGPT, you need to install the following mods:
 
 1. Clone this repository
 2. Install required Python packages: `pip install -r requirements.txt`
-3. Set up your Google Cloud Vision API key
+3. install ollama and gemma 3
 4. Install the required mods in Age of Empires II: Definitive Edition
 5. Run `python main.py` to start the application
 
@@ -67,7 +67,7 @@ To get the most out of WololoGPT, you need to install the following mods:
 
 1. Start Age of Empires II: Definitive Edition
 2. Launch AoE2 Resource Alerts
-3. Enter your API key and customize settings
+3. run ollama and gemma 3
 4. Click "Start Resource Alerts" to begin monitoring your game
 
 ## Contributing
