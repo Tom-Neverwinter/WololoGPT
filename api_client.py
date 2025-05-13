@@ -3,7 +3,7 @@ import requests
 import uuid
 import socket
 import platform
-from config import API_BASE_URL
+from config import API_BASE_URL, AI_CONFIG
 from utils import logger
 
 class APIClient:
@@ -26,8 +26,13 @@ class APIClient:
                 from ai_analysis import AIAnalysis
                 resources = AIAnalysis.get_system_resource_info()
                 client_info["system_resources"] = resources
+                
+                # Add model information
+                models = AIAnalysis.list_available_ollama_models()
+                if models:
+                    client_info["available_models"] = models
             except Exception as e:
-                logger.warning(f"Could not get system resources: {str(e)}")
+                logger.warning(f"Could not get system resources or models: {str(e)}")
             
             data = {
                 "ip": self.get_ip(),
@@ -103,5 +108,31 @@ class APIClient:
         """Enable or disable API tracking"""
         self.api_enabled = enabled
         logger.info(f"API tracking {'enabled' if enabled else 'disabled'}")
+
+    def log_ai_model_usage(self, model_name, action_type, duration_ms=None, successful=True, error_message=None):
+        """Log AI model usage for analytics"""
+        if not self.api_enabled or not self.session_id:
+            return
+            
+        try:
+            data = {
+                "session_id": self.session_id,
+                "action_type": "model_usage",
+                "description": f"Used model {model_name} for {action_type}",
+                "additional_data": {
+                    "model_name": model_name,
+                    "action_type": action_type,
+                    "duration_ms": duration_ms,
+                    "successful": successful
+                }
+            }
+            
+            if error_message:
+                data["additional_data"]["error_message"] = error_message
+                
+            response = requests.post(f"{API_BASE_URL}/actions/", json=data)
+            response.raise_for_status()
+        except Exception as e:
+            logger.error(f"Failed to log model usage: {str(e)}")
 
 api_client = APIClient()
