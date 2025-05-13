@@ -21,21 +21,20 @@ def get_screenshot_regions():
 # AI Models Configuration
 AI_CONFIG = {
     "default_models": {
-        "image": "gemma3:4b-it-qat",    # 4B quantized multimodal model
-        "audio": "whisper",              # Specialized audio model
-        "fallback": "gemma3:1b-it-qat",  # Smaller model for low-resource systems
-        "text": "gemma3:7b"              # Full-size text model for complex reasoning
+        "image": "gemma3:4b-it-qat",  # 4B quantized multimodal model
+        "audio": "whisper",           # Specialized audio model
+        "fallback": "gemma3:1b-it-qat" # Smaller model for low-resource systems
     },
     "options": {
-        "temperature": 0.1,              # Lower temperature for more consistent outputs
-        "num_gpu": 1,                    # Use 1 GPU
-        "num_thread": 4,                 # Limit threads to not impact game performance
-        "rope_frequency_base": 10000,    # Standard RoPE settings
+        "temperature": 0.1,         # Lower temperature for more consistent outputs
+        "num_gpu": 1,               # Use 1 GPU
+        "num_thread": 4,            # Limit threads to not impact game performance
+        "rope_frequency_base": 10000, # Standard RoPE settings
         "rope_frequency_scale": 1.0,
     }
 }
 
-# Legacy API keys (kept for backward compatibility)
+# API keys are kept for backward compatibility
 API_KEYS = {
     "GROQ": "",
     "GOOGLE": ""  # This will be set by the user
@@ -52,10 +51,6 @@ RESOURCE_SCREENSHOT_REGION, CIV_SCREENSHOT_REGION = get_screenshot_regions()
 RESOURCE_CHECK_PROMPT_PATH = resource_path('prompts/resource_check_prompt.txt')
 CIV_COUNTER_PROMPT_PATH = resource_path('prompts/civ_counter_prompt.txt')
 
-# Ensure prompt directories exist
-os.makedirs(os.path.dirname(RESOURCE_CHECK_PROMPT_PATH), exist_ok=True)
-os.makedirs(os.path.dirname(CIV_COUNTER_PROMPT_PATH), exist_ok=True)
-
 # Load prompts from files if they exist
 def load_prompt_from_file(file_path, default_prompt):
     try:
@@ -63,6 +58,9 @@ def load_prompt_from_file(file_path, default_prompt):
             return f.read()
     except FileNotFoundError:
         logger.warning(f"Prompt file not found at {file_path}, using default prompt")
+        
+        # Create directory if it doesn't exist
+        os.makedirs(os.path.dirname(file_path), exist_ok=True)
         
         # Write default prompt to file for future use
         try:
@@ -171,6 +169,10 @@ def get_default_civ_counter_prompt(username, teammates):
         Do not return players with the following name: {username}, {teammates}
         """
     return base_prompt.format(username=username, teammates=teammates)
+
+# For backward compatibility
+def get_civ_counter_prompt(username, teammates):
+    return get_default_civ_counter_prompt(username, teammates)
 
 def load_user_info():
     try:
