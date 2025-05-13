@@ -41,7 +41,7 @@ class AIAnalysis:
                 }
             }
             
-            response = requests.post(url, json=payload)
+            response = requests.post(url, json=payload, timeout=60)
             response.raise_for_status()
             result = response.json()
             
@@ -64,6 +64,15 @@ class AIAnalysis:
             str: Analysis result in the requested format
         """
         try:
+            # Check if Ollama is running first
+            try:
+                check_url = "http://localhost:11434/api/tags"
+                check_response = requests.get(check_url, timeout=5)
+                check_response.raise_for_status()
+            except Exception as e:
+                logger.error(f"Ollama server is not accessible: {str(e)}")
+                return "Error: Ollama is not running or accessible. Please start Ollama service."
+                
             # Check if image exists
             if not os.path.exists(image_path):
                 raise FileNotFoundError(f"Image not found at {image_path}")
@@ -106,11 +115,41 @@ class AIAnalysis:
             for attempt in range(max_retries):
                 try:
                     logger.info(f"Sending image analysis request to Ollama, attempt {attempt + 1}")
-                    response = requests.post(url, json=payload)
-                    response.raise_for_status()
-                    result = response.json()
                     
-                    return result.get("response", "")
+                    try:
+                        response = requests.post(url, json=payload, timeout=60)
+                        if response.status_code == 404:
+                            # Try alternative endpoint - Ollama may have changed API structure
+                            url_alt = "http://localhost:11434/api/chat"
+                            chat_payload = {
+                                "model": model_name,
+                                "messages": [
+                                    {
+                                        "role": "user",
+                                        "content": f"{prompt}\n\nAnalyze this image and provide the results in the requested JSON format:",
+                                        "images": [base64_image]
+                                    }
+                                ],
+                                "stream": False,
+                                "options": AIAnalysis.optimization_options
+                            }
+                            logger.info(f"Trying alternative chat endpoint after 404")
+                            response = requests.post(url_alt, json=chat_payload, timeout=60)
+                        response.raise_for_status()
+                        
+                        result = response.json()
+                        
+                        # Handle different response formats
+                        if "message" in result and "content" in result["message"]:
+                            # /api/chat endpoint
+                            return result["message"]["content"]
+                        else:
+                            # /api/generate endpoint
+                            return result.get("response", "")
+                    except requests.exceptions.RequestException as req_err:
+                        logger.error(f"Request error: {str(req_err)}")
+                        raise req_err
+                        
                 except Exception as e:
                     if attempt < max_retries - 1:
                         logger.warning(f"Attempt {attempt + 1} failed: {str(e)}. Retrying in {retry_delay} seconds...")
@@ -129,7 +168,7 @@ class AIAnalysis:
         try:
             # First check if Ollama server is running
             url = "http://localhost:11434/api/tags"
-            response = requests.get(url)
+            response = requests.get(url, timeout=10)
             response.raise_for_status()
             
             # Then check if the requested model is available
@@ -148,7 +187,7 @@ class AIAnalysis:
                     "options": AIAnalysis.optimization_options
                 }
                 
-                test_response = requests.post(test_url, json=test_payload)
+                test_response = requests.post(test_url, json=test_payload, timeout=30)
                 test_response.raise_for_status()
                 result = test_response.json()
                 
@@ -170,7 +209,7 @@ class AIAnalysis:
         """Get a list of available Ollama models with size estimates"""
         try:
             url = "http://localhost:11434/api/tags"
-            response = requests.get(url)
+            response = requests.get(url, timeout=10)
             response.raise_for_status()
             
             models = response.json().get("models", [])
