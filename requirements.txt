@@ -14,6 +14,7 @@ google-auth==2.35.0        # Authentication library for Google services (OAuth2,
 google-auth-httplib2==0.2.0   # Integration between google-auth and httplib2 HTTP client
 google-generativeai==0.8.3 # High-level Python SDK for Google’s generative AI endpoints
 googleapis-common-protos==1.65.0  # Shared protobuf definitions used by Google API clients
+GPUtil==1.4.0
 groq==0.11.0               # Python client for GROQ, Sanity.io’s JSON query language
 grpcio==1.67.0             # Core gRPC library for high-performance RPC in Python
 grpcio-status==1.67.0      # Utilities for gRPC status codes and rich error details
