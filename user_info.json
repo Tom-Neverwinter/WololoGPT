@@ -1,1 +1,16 @@
-{"your_username": "v", "teammates_usernames": "", "api_key": "AIzaSyAKF946EQiGTQVbE5-KzbZwPdaS49fHPyE", "audio_alerts_enabled": true, "idle_villager_audio_enabled": true, "villager_hotkey": "1", "castle_hotkey": "2"}
+{
+    "your_username": "v",
+    "teammates_usernames": "",
+    "api_key": "AIzaSyAKF946EQiGTQVbE5-KzbZwPdaS49fHPyE",
+    "audio_alerts_enabled": true,
+    "idle_villager_audio_enabled": true,
+    "villager_hotkey": "1",
+    "castle_hotkey": "2",
+    "ai_settings": {
+        "use_ollama": true,
+        "preferred_model": "gemma3:4b-it-qat",
+        "fallback_model": "gemma3:1b-it-qat",
+        "optimize_for_gaming": true
+    },
+    "api_tracking_enabled": true
+}
