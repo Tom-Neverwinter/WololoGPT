@@ -14,7 +14,6 @@ google-auth==2.35.0        # Authentication library for Google services (OAuth2,
 google-auth-httplib2==0.2.0   # Integration between google-auth and httplib2 HTTP client
 google-generativeai==0.8.3 # High-level Python SDK for Google’s generative AI endpoints
 googleapis-common-protos==1.65.0  # Shared protobuf definitions used by Google API clients
-GPUtil==1.4.0
 groq==0.11.0               # Python client for GROQ, Sanity.io’s JSON query language
 grpcio==1.67.0             # Core gRPC library for high-performance RPC in Python
 grpcio-status==1.67.0      # Utilities for gRPC status codes and rich error details
@@ -50,7 +49,7 @@ PyScreeze==1.0.1           # Screenshots and basic image-matching (used by PyAut
 pytweening==1.2.0          # Tweening/easing functions for animations
 pywin32-ctypes==0.2.3      # ctypes-only reimplementation of parts of pywin32
 psutil==5.9.5              # Process and system resource utilities (CPU, memory, etc.)
-pyaudio==0.2.13            # Python bindings for PortAudio (audio I/O; recording/playback)
+#pyaudio==0.2.13            # Python bindings for PortAudio (audio I/O; recording/playback)
 requests==2.32.3           # Human-friendly HTTP library for making requests
 rsa==4.9                   # Pure-Python RSA encryption and signing library
 sniffio==1.3.1             # Detects which async library is running (asyncio, trio, etc.)
