@@ -1,5 +1,7 @@
 import pyautogui
 import json
+import os
+from utils import resource_path, logger
 
 def get_screenshot_regions():
     screen_width, screen_height = pyautogui.size()
@@ -16,6 +18,24 @@ def get_screenshot_regions():
     
     return RESOURCE_SCREENSHOT_REGION, CIV_SCREENSHOT_REGION
 
+# AI Models Configuration
+AI_CONFIG = {
+    "default_models": {
+        "image": "gemma3:4b-it-qat",    # 4B quantized multimodal model
+        "audio": "whisper",              # Specialized audio model
+        "fallback": "gemma3:1b-it-qat",  # Smaller model for low-resource systems
+        "text": "gemma3:7b"              # Full-size text model for complex reasoning
+    },
+    "options": {
+        "temperature": 0.1,              # Lower temperature for more consistent outputs
+        "num_gpu": 1,                    # Use 1 GPU
+        "num_thread": 4,                 # Limit threads to not impact game performance
+        "rope_frequency_base": 10000,    # Standard RoPE settings
+        "rope_frequency_scale": 1.0,
+    }
+}
+
+# Legacy API keys (kept for backward compatibility)
 API_KEYS = {
     "GROQ": "",
     "GOOGLE": ""  # This will be set by the user
@@ -28,7 +48,33 @@ AUDIO_VOLUME = 0.35
 
 RESOURCE_SCREENSHOT_REGION, CIV_SCREENSHOT_REGION = get_screenshot_regions()
 
-RESOURCE_CHECK_PROMPT = """
+# Define paths for prompt files
+RESOURCE_CHECK_PROMPT_PATH = resource_path('prompts/resource_check_prompt.txt')
+CIV_COUNTER_PROMPT_PATH = resource_path('prompts/civ_counter_prompt.txt')
+
+# Ensure prompt directories exist
+os.makedirs(os.path.dirname(RESOURCE_CHECK_PROMPT_PATH), exist_ok=True)
+os.makedirs(os.path.dirname(CIV_COUNTER_PROMPT_PATH), exist_ok=True)
+
+# Load prompts from files if they exist
+def load_prompt_from_file(file_path, default_prompt):
+    try:
+        with open(file_path, 'r') as f:
+            return f.read()
+    except FileNotFoundError:
+        logger.warning(f"Prompt file not found at {file_path}, using default prompt")
+        
+        # Write default prompt to file for future use
+        try:
+            with open(file_path, 'w') as f:
+                f.write(default_prompt)
+        except Exception as e:
+            logger.error(f"Failed to write default prompt to file: {str(e)}")
+            
+        return default_prompt
+
+# Default prompts
+DEFAULT_RESOURCE_CHECK_PROMPT = """
 You are a Age of empires 2 data analyst. You are given a screenshot of the resource bar of a live match. You must OCR the text correctly
 
         The information is how the information is presented every time: the small numbers at the bottom right of each icon represent the number of villagers working on the resource. The bigger number on the right of each icon is the resource count. Underneath the two person icon is the number_of_villagers. At the right of that, in XX/XXX format (example: 5/10) is the (number of total units / house limit), and the number of idle villagers is in red in a bell shape icon if any. Provide separate values..
@@ -65,7 +111,7 @@ You are a Age of empires 2 data analyst. You are given a screenshot of the resou
         IMPORTANT: If you can't find any relevant information or all values are 0, always return: 0 for all values.}
 """
 
-def get_civ_counter_prompt(username, teammates):
+def get_default_civ_counter_prompt(username, teammates):
     base_prompt = """
         You are an Age of Empires 2 screenshot analyst. You are given a screenshot of the civilization selection screen of a live match. You must OCR the text correctly.
 
@@ -135,16 +181,22 @@ def load_user_info():
         return "", ""
 
 username, teammates = load_user_info()
-CIV_COUNTER_PROMPT = get_civ_counter_prompt(username, teammates)
 
-# Existing constants
-# DEFAULT_USERNAME = "vincent@wololo.gpt"
-# DEFAULT_PASSWORD = "test"
+# Load prompts from files or use defaults
+RESOURCE_CHECK_PROMPT = load_prompt_from_file(RESOURCE_CHECK_PROMPT_PATH, DEFAULT_RESOURCE_CHECK_PROMPT)
+CIV_COUNTER_PROMPT = load_prompt_from_file(CIV_COUNTER_PROMPT_PATH, get_default_civ_counter_prompt(username, teammates))
 
-# New constants
+# Timing constants
 RESOURCE_CHECK_INTERVAL = 15  # seconds
 VILLAGER_WARNING_INTERVAL = 50  # seconds
+OLLAMA_CONNECTION_RETRY_INTERVAL = 30  # seconds
 
-# You may want to add or adjust other constants as needed
+# Paths to data files
+COUNTERS_DATA_PATH = resource_path('counters_data/aoe2_counter_unique_gemini.json')
 
+# App configuration
 API_BASE_URL = "http://api.wolologpt.com"
+ENABLE_API_TRACKING = True  # Can be toggled in settings
+
+# Feature flags
+USE_OLLAMA = True  # Set to False to use API-based services instead
