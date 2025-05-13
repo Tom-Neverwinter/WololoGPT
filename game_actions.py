@@ -3,7 +3,7 @@ import time
 from screenshot_manager import ScreenshotManager
 from ai_analysis import AIAnalysis
 from utils import logger, show_popup_message
-from config import get_civ_counter_prompt, API_KEYS
+from config import get_default_civ_counter_prompt as get_civ_counter_prompt, API_KEYS
 from api_client import api_client
 
 
