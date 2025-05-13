@@ -198,7 +198,7 @@ COUNTERS_DATA_PATH = resource_path('counters_data/aoe2_counter_unique_gemini.jso
 
 # App configuration
 API_BASE_URL = "http://api.wolologpt.com"
-ENABLE_API_TRACKING = True  # Can be toggled in settings
+ENABLE_API_TRACKING = False  # Can be toggled in settings
 
 # Feature flags
 USE_OLLAMA = True  # Set to False to use API-based services instead
