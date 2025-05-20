@@ -68,6 +68,9 @@ class MainWindow(QWidget):
         # Play welcome audio
         AudioManager.play_audio('audio/warnings/welcome.mp3', volume=0.5)
 
+        # Check Ollama status after UI is initialized and user info loaded
+        self.check_ollama_status()
+
     def initUI(self):
         """Initialize the user interface"""
         layout = QVBoxLayout()
@@ -91,6 +94,10 @@ class MainWindow(QWidget):
         # Add LLM API status indicator
         self.llm_api_status_layout = self.create_llm_api_status_layout()
         layout.addLayout(self.llm_api_status_layout)
+
+        # Add Ollama status indicator
+        self.ollama_status_layout = self.create_ollama_status_layout()
+        layout.addLayout(self.ollama_status_layout)
         
         # Add server status indicator
         self.server_status_layout = self.create_server_status_layout()
@@ -388,7 +395,7 @@ class MainWindow(QWidget):
                 self.api_key_validated = False
                 self.update_api_key_status(False)
                 self.update_llm_api_status(False)
-                self.update_start_button_text()
+                # self.update_start_button_text() # This will be called by check_ollama_status
                 
             self.setup_hotkeys()
         except FileNotFoundError:
@@ -412,10 +419,10 @@ class MainWindow(QWidget):
             self.update_api_key_status(False)
             self.update_llm_api_status(False)
             show_popup_message("API Key Error", f"Failed to verify API key: {message}")
-            self.start_button.setEnabled(False)
+            # self.start_button.setEnabled(False) # Managed by update_start_button_text
             self.stop_button.setEnabled(False)
             self.api_key_validated = False
-            self.update_start_button_text()
+            self.update_start_button_text() # This will consider Ollama status too
             self.api_key_status_icon.hide()  # Hide the icon if validation fails
 
     def update_api_key_status(self, is_valid):
@@ -595,10 +602,53 @@ class MainWindow(QWidget):
         return super().eventFilter(obj, event)
 
     def update_start_button_text(self):
-        if self.api_key_validated:
+        ollama_ok = hasattr(self, 'ollama_status_indicator') and self.ollama_status_indicator.toolTip() == "Ollama Connected"
+        
+        if self.api_key_validated and ollama_ok:
             self.start_button.setText("Start Resource Alerts")
-        else:
+            self.start_button.setEnabled(True)
+        elif not self.api_key_validated:
             self.start_button.setText("Activate API Key First")
+            self.start_button.setEnabled(False)
+        elif not ollama_ok:
+            self.start_button.setText("Check Ollama Status")
+            self.start_button.setEnabled(False)
+        else: # Default fallback
+            self.start_button.setText("Waiting for API and Ollama...")
+            self.start_button.setEnabled(False)
+
+    def create_ollama_status_layout(self):
+        ollama_status_layout = QHBoxLayout()
+        self.ollama_status_label_text = QLabel("Ollama Status:") # Static text label
+        self.ollama_status_indicator = QLabel() # For the colored circle
+        self.ollama_status_indicator.setFixedSize(16, 16)
+        self.ollama_status_message_label = QLabel("Checking...") # For dynamic messages
+        
+        ollama_status_layout.addWidget(self.ollama_status_label_text)
+        ollama_status_layout.addWidget(self.ollama_status_indicator)
+        ollama_status_layout.addWidget(self.ollama_status_message_label)
+        ollama_status_layout.addStretch()
+        return ollama_status_layout
+
+    def check_ollama_status(self):
+       success, message = AIAnalysis.test_ollama_connection()
+
+       if success:
+           self.ollama_status_indicator.setStyleSheet("background-color: #90EE90; border-radius: 8px;")
+           self.ollama_status_indicator.setToolTip("Ollama Connected")
+           # Display only the main part of the success message, not the full details unless hovered.
+           short_message = message.split('.')[0] if '.' in message else message
+           self.ollama_status_message_label.setText(short_message)
+           self.ollama_status_message_label.setToolTip(message) # Full message on hover
+       else:
+           self.ollama_status_indicator.setStyleSheet("background-color: #FFB6C1; border-radius: 8px;")
+           self.ollama_status_indicator.setToolTip("Ollama Connection Error")
+           # Display a concise error message, full details in popup and hover.
+           short_error_message = message.split('.')[0] if '.' in message else message
+           self.ollama_status_message_label.setText(f"Error: {short_error_message}")
+           self.ollama_status_message_label.setToolTip(message) # Full message on hover
+           QMessageBox.warning(self, "Ollama Connection Error", message)
+       self.update_start_button_text()
 
     def toggle_castle_unit_creation(self, state):
         """Toggle the castle unit creation feature"""
@@ -625,13 +675,23 @@ def exception_hook(exctype, value, tb):
     """
     traceback_formated = traceback.format_exception(exctype, value, tb)
     traceback_string = "".join(traceback_formated)
-    print(traceback_string, file=sys.stderr)
     
-    # Log the error via the API client
-    error_message = f"Unhandled exception: {exctype.__name__}: {str(value)}\n{traceback_string}"
-    api_client.create_action("crash", error_message)
+    # Print to stderr (as before)
+    print(f"Unhandled Exception: {exctype.__name__}: {str(value)}\n{traceback_string}", file=sys.stderr)
+
+    # Log to local file using the logger from utils.py
+    log_message = f"Unhandled global exception caught by exception_hook:\nType: {exctype.__name__}\nValue: {str(value)}\nTraceback:\n{traceback_string}"
+    logger.critical(log_message)
+
+    # Then, attempt to log via API client
+    api_error_message = f"Unhandled exception: {exctype.__name__}: {str(value)}\n{traceback_string}"
+    try:
+        api_client.create_action("crash", api_error_message)
+        logger.info("Successfully reported crash to API.")
+    except Exception as api_e:
+        logger.error(f"Failed to report crash to API: {api_e}")
     
-    sys.exit(1)
+    sys.exit(1) # Consider if sys.exit is always appropriate, but for now, keep it.
 
 def main():
     """Main function to run the application"""

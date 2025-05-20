@@ -63,6 +63,66 @@ To get the most out of WololoGPT, you need to install the following mods:
 4. Install the required mods in Age of Empires II: Definitive Edition
 5. Run `python main.py` to start the application
 
+## Development Environment Setup with `pyenv`
+
+For developers contributing to WololoGPT or setting up a more controlled Python environment, using `pyenv` is highly recommended. This allows you to manage multiple Python versions and ensure a clean setup.
+
+### 1. Pre-install Python Build Dependencies
+
+Before using `pyenv install <python_version>`, it's crucial to install common Python build dependencies on your operating system. This prevents many common issues during Python compilation.
+
+*   **For Ubuntu/Debian-based Linux:**
+    ```bash
+    sudo apt-get update
+    sudo apt-get install -y make build-essential libssl-dev zlib1g-dev libbz2-dev \
+    libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev libncursesw5-dev \
+    xz-utils tk-dev libffi-dev liblzma-dev python3-openssl git
+    ```
+*   **For macOS (using Homebrew):**
+    ```bash
+    brew install openssl readline sqlite3 xz zlib tcl-tk
+    ```
+    *Note for macOS*: You might also need to set `CFLAGS` and `LDFLAGS` environment variables for `pyenv` to correctly find these Homebrew-installed libraries during Python compilation. Refer to `pyenv` documentation and Homebrew notes for `openssl` and `tcl-tk`.
+
+### 2. Ensuring Ollama Accessibility
+
+WololoGPT relies on Ollama for its AI capabilities.
+*   **Ollama Installation**: Ensure Ollama is installed and running as a separate service on your system. You can download it from [ollama.com](https://ollama.com/).
+*   **Default Connection**: The application connects to Ollama by default at `http://localhost:11434`.
+*   **Firewall**: If you experience connection issues with Ollama, ensure your firewall is not blocking this local connection.
+
+### 3. Virtual Environment and Dependencies
+
+Once `pyenv` and the desired Python version (e.g., 3.9, 3.10) are set up:
+
+1.  **Create a Virtual Environment**:
+    ```bash
+    pyenv virtualenv <python_version> wolologpt-env
+    ```
+2.  **Activate the Environment**:
+    ```bash
+    pyenv activate wolologpt-env
+    ```
+    Alternatively, you can set a local `pyenv` version for the project directory:
+    ```bash
+    pyenv local wolologpt-env
+    ```
+    Or, if you just installed a Python version (e.g., 3.10.0) and want to create a venv directly:
+    ```bash
+    python -m venv .venv
+    source .venv/bin/activate # On Linux/macOS
+    # .venv\Scripts\activate # On Windows
+    ```
+3.  **Install Dependencies**: With the virtual environment activated, install the project dependencies:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+### 4. Troubleshooting GUI Issues
+
+*   **Tkinter Support**: If GUI elements don't appear correctly or you encounter errors related to `tkinter`, ensure that your Python version was compiled with Tkinter support. Installing the `tk-dev` (or equivalent, like `tcl-tk` via Homebrew) package *before* installing the Python version with `pyenv` is crucial (see Point 1).
+*   **PyQt6 Issues**: The `PyQt6` package in `requirements.txt` bundles the necessary Qt6 libraries (`PyQt6-Qt6`). However, if you encounter persistent issues, especially on Linux, ensuring system-level Qt6 development packages (e.g., `qt6-base-dev` on Debian/Ubuntu) are installed can sometimes help, though this should ideally not be necessary. Always ensure your virtual environment is correctly activated and `pip install` commands are run within it.
+
 ## Usage
 
 1. Start Age of Empires II: Definitive Edition
