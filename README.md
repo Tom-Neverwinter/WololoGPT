@@ -32,7 +32,7 @@ WololoGPT solves several key challenges:
 
 To run AoE2 Resource Alerts, you need:
 
-1. Python 3.7 or higher
+1. Python 3.9, 3.10, or 3.11. This is crucial for compatibility.
 2. Required Python packages (see requirements.txt):
    - PyQt6
    - google-cloud-vision
@@ -57,19 +57,63 @@ To get the most out of WololoGPT, you need to install the following mods:
 
 ## Installation
 
-1. Clone this repository
-2. Install required Python packages: `pip install -r requirements.txt`
-3. install ollama and gemma 3
-4. Install the required mods in Age of Empires II: Definitive Edition
-5. Run `python main.py` to start the application
+Follow these steps to get WololoGPT running on your system. This project requires **Python 3.9, 3.10, or 3.11**.
+
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/tony-png/WololoGPT-1.0.0---Github-Official.git
+    cd WololoGPT-1.0.0---Github-Official
+    ```
+
+2.  **Create and activate a virtual environment:**
+    Using a virtual environment is highly recommended to manage dependencies cleanly.
+    ```bash
+    # Replace 'python' with 'python3' if needed, depending on your system setup
+    python -m venv .venv 
+    ```
+    Activate the environment:
+    -   On Windows:
+        ```bash
+        .venv\Scripts\activate
+        ```
+    -   On macOS/Linux:
+        ```bash
+        source .venv/bin/activate
+        ```
+
+3.  **Upgrade pip:**
+    Ensure you have the latest version of pip.
+    ```bash
+    python -m pip install --upgrade pip
+    ```
+
+4.  **Install required Python packages:**
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+5.  **Install Ollama and Gemma 3:**
+    WololoGPT uses Ollama with the Gemma 3 model (4B it-qat preferred) for its AI features.
+    - Download and install Ollama from [ollama.com](https://ollama.com/).
+    - Ensure Ollama is running.
+    - Pull the Gemma 3 model: `ollama pull gemma2:2b-instruct-q4_0` (or your preferred Gemma 3 variant like `gemma:7b-instruct-q4_0` if your hardware supports it). The `gemma3:4b-it-qat` model mentioned in earlier docs might be a specific version you are using, adjust pull command as needed.
+
+6.  **Install the required mods in Age of Empires II: Definitive Edition** (See "Required Mods" section above).
+
+7.  **Run the application:**
+    ```bash
+    python main.py
+    ```
 
 ## Development Environment Setup with `pyenv`
 
-For developers contributing to WololoGPT or setting up a more controlled Python environment, using `pyenv` is highly recommended. This allows you to manage multiple Python versions and ensure a clean setup.
+For developers, using `pyenv` helps manage specific Python versions (3.9, 3.10, or 3.11 as required by this project) and maintain a clean development environment.
 
-### 1. Pre-install Python Build Dependencies
+### 1. Install `pyenv`
+If you don't have `pyenv` installed, follow the official installation instructions for your operating system from the [pyenv GitHub repository](https://github.com/pyenv/pyenv#installation).
 
-Before using `pyenv install <python_version>`, it's crucial to install common Python build dependencies on your operating system. This prevents many common issues during Python compilation.
+### 2. Pre-install Python Build Dependencies
+Before installing a Python version with `pyenv`, install necessary build dependencies.
 
 *   **For Ubuntu/Debian-based Linux:**
     ```bash
@@ -84,41 +128,52 @@ Before using `pyenv install <python_version>`, it's crucial to install common Py
     ```
     *Note for macOS*: You might also need to set `CFLAGS` and `LDFLAGS` environment variables for `pyenv` to correctly find these Homebrew-installed libraries during Python compilation. Refer to `pyenv` documentation and Homebrew notes for `openssl` and `tcl-tk`.
 
-### 2. Ensuring Ollama Accessibility
+### 3. Install Required Python Version
+Install a compatible Python version (e.g., 3.10.x, ensuring it's within the 3.9-3.11 range).
+```bash
+pyenv install 3.10.11 # Or another 3.9.x, 3.10.x, 3.11.x version
+```
 
-WololoGPT relies on Ollama for its AI capabilities.
-*   **Ollama Installation**: Ensure Ollama is installed and running as a separate service on your system. You can download it from [ollama.com](https://ollama.com/).
-*   **Default Connection**: The application connects to Ollama by default at `http://localhost:11434`.
-*   **Firewall**: If you experience connection issues with Ollama, ensure your firewall is not blocking this local connection.
-
-### 3. Virtual Environment and Dependencies
-
-Once `pyenv` and the desired Python version (e.g., 3.9, 3.10) are set up:
-
-1.  **Create a Virtual Environment**:
+### 4. Create and Activate Virtual Environment
+Set your local Python version for the project and create a virtual environment.
+```bash
+cd path/to/WololoGPT-1.0.0---Github-Official 
+pyenv local 3.10.11 # Sets the version for this project directory
+```
+Create the virtual environment (choose one method):
+   - Using `pyenv-virtualenv` (if installed as a `pyenv` plugin):
     ```bash
-    pyenv virtualenv <python_version> wolologpt-env
+    pyenv virtualenv 3.10.11 wolologpt-env
+    pyenv activate wolologpt-env 
+    # or pyenv local wolologpt-env (to auto-activate when entering directory)
     ```
-2.  **Activate the Environment**:
-    ```bash
-    pyenv activate wolologpt-env
-    ```
-    Alternatively, you can set a local `pyenv` version for the project directory:
-    ```bash
-    pyenv local wolologpt-env
-    ```
-    Or, if you just installed a Python version (e.g., 3.10.0) and want to create a venv directly:
+   - Using Python's built-in `venv` module (after `pyenv local`):
     ```bash
     python -m venv .venv
     source .venv/bin/activate # On Linux/macOS
     # .venv\Scripts\activate # On Windows
     ```
-3.  **Install Dependencies**: With the virtual environment activated, install the project dependencies:
-    ```bash
-    pip install -r requirements.txt
-    ```
 
-### 4. Troubleshooting GUI Issues
+### 5. Upgrade Pip
+Once the virtual environment is activated:
+```bash
+python -m pip install --upgrade pip
+```
+
+### 6. Install Dependencies
+With the virtual environment activated and pip upgraded:
+```bash
+pip install -r requirements.txt
+```
+
+### 7. Ensuring Ollama Accessibility
+WololoGPT relies on Ollama for its AI capabilities.
+*   **Ollama Installation**: Ensure Ollama is installed and running as a separate service on your system. You can download it from [ollama.com](https://ollama.com/).
+    *   After installing Ollama, pull the required model: `ollama pull gemma2:2b-instruct-q4_0` (or your preferred Gemma 3 variant).
+*   **Default Connection**: The application connects to Ollama by default at `http://localhost:11434`.
+*   **Firewall**: If you experience connection issues with Ollama, ensure your firewall is not blocking this local connection.
+
+### 8. Troubleshooting GUI Issues
 
 *   **Tkinter Support**: If GUI elements don't appear correctly or you encounter errors related to `tkinter`, ensure that your Python version was compiled with Tkinter support. Installing the `tk-dev` (or equivalent, like `tcl-tk` via Homebrew) package *before* installing the Python version with `pyenv` is crucial (see Point 1).
 *   **PyQt6 Issues**: The `PyQt6` package in `requirements.txt` bundles the necessary Qt6 libraries (`PyQt6-Qt6`). However, if you encounter persistent issues, especially on Linux, ensuring system-level Qt6 development packages (e.g., `qt6-base-dev` on Debian/Ubuntu) are installed can sometimes help, though this should ideally not be necessary. Always ensure your virtual environment is correctly activated and `pip install` commands are run within it.

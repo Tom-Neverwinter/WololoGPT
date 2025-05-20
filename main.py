@@ -32,6 +32,44 @@ def resource_path(relative_path):
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
 
+# --- Python Version Check ---
+MIN_PYTHON_VERSION = (3, 9)
+MAX_PYTHON_VERSION = (3, 11)
+current_python_version = sys.version_info
+
+if not (MIN_PYTHON_VERSION <= current_python_version <= MAX_PYTHON_VERSION):
+    # Version is incompatible
+    version_str = f"{current_python_version.major}.{current_python_version.minor}.{current_python_version.micro}"
+    error_message = (
+        f"Unsupported Python Version: {version_str}\n\n"
+        f"WololoGPT requires Python version {MIN_PYTHON_VERSION[0]}.{MIN_PYTHON_VERSION[1]} "
+        f"to {MAX_PYTHON_VERSION[0]}.{MAX_PYTHON_VERSION[1]}.\n\n"
+        "Please use a compatible Python version (e.g., via pyenv)."
+    )
+    
+    print(error_message, file=sys.stderr) # Always print to console
+
+    try:
+        # Attempt to show a GUI message box if PyQt is available
+        # Note: QApplication and QMessageBox are already imported at the top of main.py
+        # from PyQt6.QtWidgets import QApplication, QMessageBox # Not needed again if already globally imported
+        
+        app = QApplication.instance()
+        if app is None:
+            app = QApplication([]) # Temporary app instance
+            
+        QMessageBox.critical(None, "Unsupported Python Version", error_message)
+    except ImportError:
+        # PyQt6 not available yet or import failed, console message is the fallback.
+        pass 
+    except RuntimeError:
+        # This can happen if QApplication is created but then we try to create another
+        # or if some other Qt issue occurs this early.
+        pass
+        
+    sys.exit(1)
+# --- End Python Version Check ---
+
 class MainWindow(QWidget):
     def __init__(self):
         super().__init__()
