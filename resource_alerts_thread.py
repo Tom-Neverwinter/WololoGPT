@@ -35,20 +35,26 @@ class ResourceAlertsThread(QThread):
             api_client.create_action("resource_check", "Resource check performed")
             
             if resources:
-                resources_json = json.loads(resources)
-                self.check_house_limit(resources_json)
-                self.check_villager_count(resources_json)
-                self.check_floating_resources(resources_json)
-                self.check_idle_villagers(resources_json)
-                self.play_queued_warnings()
-                logger.info(resources)
-                
-                # Track successful resource analysis
-                #api_client.create_action("resource_analysis", f"Resource analysis completed: {resources}")
+                try:
+                    resources_json = json.loads(resources)
+                    self.check_house_limit(resources_json)
+                    self.check_villager_count(resources_json)
+                    self.check_floating_resources(resources_json)
+                    self.check_idle_villagers(resources_json)
+                    self.play_queued_warnings()
+                    logger.info(resources)
+                    
+                    # Track successful resource analysis
+                    #api_client.create_action("resource_analysis", f"Resource analysis completed: {resources}")
+                except json.JSONDecodeError as e:
+                    logger.error(f"Failed to parse AI analysis response as JSON. Response: '{resources}'. Error: {e}")
+                    # Track failed resource analysis
+                    api_client.create_action("resource_analysis_error", f"Failed to parse AI analysis response: {resources}")
+                    continue  # Continue to the next iteration of the loop
             else:
-                logger.error("Error with LLM provider")
+                logger.error("Error with LLM provider or empty response")
                 # Track failed resource analysis
-                api_client.create_action("resource_analysis_error", "Failed to analyze resources")
+                api_client.create_action("resource_analysis_error", "LLM provider returned empty response")
             
             time.sleep(RESOURCE_CHECK_INTERVAL)
 
