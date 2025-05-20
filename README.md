@@ -57,21 +57,47 @@ To get the most out of WololoGPT, you need to install the following mods:
 
 ## Installation
 
-Follow these steps to get WololoGPT running on your system. This project requires **Python 3.9, 3.10, or 3.11**.
+This project requires **Python 3.9, 3.10, or 3.11**.
 
-1.  **Clone the repository:**
+1.  **Ensure you have a compatible Python version installed.**
+    You can check your version with `python --version` or `py --version` (on Windows). If `python` points to an older version (like Python 2), try `python3 --version`. If you don't have a compatible version (3.9, 3.10, or 3.11), install one (e.g., from [python.org](https://www.python.org/downloads/) or using a version manager like `pyenv` - see "Development Environment Setup with `pyenv`" section).
+
+2.  **Clone the repository:**
     ```bash
     git clone https://github.com/tony-png/WololoGPT-1.0.0---Github-Official.git
     cd WololoGPT-1.0.0---Github-Official
     ```
 
-2.  **Create and activate a virtual environment:**
-    Using a virtual environment is highly recommended to manage dependencies cleanly.
-    ```bash
-    # Replace 'python' with 'python3' if needed, depending on your system setup
-    python -m venv .venv 
-    ```
-    Activate the environment:
+3.  **Create a virtual environment (Recommended):**
+    Using a virtual environment is highly recommended. Choose **one** of the following methods based on your operating system and installed Python version. Replace `3.10` with your chosen compatible version (e.g., `3.9`, `3.11`).
+
+    *   **Windows (using the Python Launcher `py.exe`):**
+        ```bash
+        py -3.10 -m venv .venv
+        ```
+        This command explicitly uses Python 3.10. If you have it installed, `py.exe` should find it.
+
+    *   **macOS / Linux (using version-specific command):**
+        ```bash
+        python3.10 -m venv .venv
+        ```
+        This command assumes `python3.10` (or `python3.9`, `python3.11`) is available in your PATH.
+
+    *   **macOS / Linux (if `python3` points to a compatible version):**
+        If your `python3` command already points to a compatible version (3.9, 3.10, or 3.11), you can use:
+        ```bash
+        python3 -m venv .venv
+        ```
+            
+            *A Note on these Commands:*
+            *   On **Windows**, `py -3.10` utilizes the Python Launcher (`py.exe`), which is typically installed with Python for Windows. If you have multiple Python versions (e.g., 3.9, 3.10, 3.11) installed, this command helps select the specific version (e.g., 3.10 in the command) for creating the environment. If the specified version isn't found, `py.exe` will usually report an error.
+            *   On **macOS and Linux**, commands like `python3.10` require that the specific Python version's executable is installed and available in your system's PATH. This is often the case with standard installations (e.g., from source, via package managers like `apt` or `Homebrew`, or by tools like `pyenv`). If a command like `python3.10` is not found, it means either that specific Python version is not installed, or it's not correctly added to the PATH.
+            
+            *Remember to replace `3.10` in the example commands with your chosen compatible version (3.9, 3.10, or 3.11) based on the project's requirements and your installed Python versions.*
+
+    *Note: If the version-specific command isn't found, ensure you've installed that Python version and it's added to your system's PATH. Using these specific commands helps ensure the virtual environment is created with the correct Python version, especially if you have multiple Python versions installed and are not using `pyenv` for this step.*
+
+4.  **Activate the virtual environment:**
     -   On Windows:
         ```bash
         .venv\Scripts\activate
@@ -81,26 +107,27 @@ Follow these steps to get WololoGPT running on your system. This project require
         source .venv/bin/activate
         ```
 
-3.  **Upgrade pip:**
-    Ensure you have the latest version of pip.
+5.  **Upgrade pip (inside the activated environment):**
+    Once the virtual environment is activated, `python` will refer to the correct interpreter.
     ```bash
     python -m pip install --upgrade pip
     ```
 
-4.  **Install required Python packages:**
+6.  **Install dependencies (inside the activated environment):**
     ```bash
-    pip install -r requirements.txt
+    pip install -r requirements.txt 
     ```
+    *(Using `python -m pip install -r requirements.txt` is also a good practice).*
 
-5.  **Install Ollama and Gemma 3:**
+7.  **Install Ollama and Gemma 3:**
     WololoGPT uses Ollama with the Gemma 3 model (4B it-qat preferred) for its AI features.
     - Download and install Ollama from [ollama.com](https://ollama.com/).
     - Ensure Ollama is running.
     - Pull the Gemma 3 model: `ollama pull gemma2:2b-instruct-q4_0` (or your preferred Gemma 3 variant like `gemma:7b-instruct-q4_0` if your hardware supports it). The `gemma3:4b-it-qat` model mentioned in earlier docs might be a specific version you are using, adjust pull command as needed.
 
-6.  **Install the required mods in Age of Empires II: Definitive Edition** (See "Required Mods" section above).
+8.  **Install the required mods in Age of Empires II: Definitive Edition** (See "Required Mods" section above).
 
-7.  **Run the application:**
+9.  **Run the application:**
     ```bash
     python main.py
     ```
@@ -149,13 +176,14 @@ Create the virtual environment (choose one method):
     ```
    - Using Python's built-in `venv` module (after `pyenv local`):
     ```bash
-    python -m venv .venv
+    python -m venv .venv 
     source .venv/bin/activate # On Linux/macOS
     # .venv\Scripts\activate # On Windows
     ```
+    *Note: After setting your local Python version with `pyenv local 3.10.x` or activating a pyenv virtual environment (e.g., `pyenv activate wolologpt-env`), the `python` command within your shell will correctly refer to the version managed by `pyenv`. You can then proceed with `python -m venv .venv` (if you prefer an additional venv layer on top of the pyenv-selected Python version) and subsequent `python -m pip ...` commands.*
 
 ### 5. Upgrade Pip
-Once the virtual environment is activated:
+Once the virtual environment is activated (either the one created by `pyenv virtualenv` or the one created via `python -m venv .venv`):
 ```bash
 python -m pip install --upgrade pip
 ```
@@ -165,6 +193,7 @@ With the virtual environment activated and pip upgraded:
 ```bash
 pip install -r requirements.txt
 ```
+*(Using `python -m pip install -r requirements.txt` is also a good practice).*
 
 ### 7. Ensuring Ollama Accessibility
 WololoGPT relies on Ollama for its AI capabilities.
