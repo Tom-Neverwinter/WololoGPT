@@ -1,20 +1,20 @@
-altgraph==0.17.4           # A dependency‐graph library used by PyInstaller to analyze imports
+altgraph==0.17.4           # A dependency-graph library used by PyInstaller to analyze imports
 annotated-types==0.7.0     # Helpers for richer typing annotations (used by libraries like Pydantic)
 anyio==4.6.2.post1         # Common async API layer supporting asyncio, trio, etc., used by HTTPX and others
 cachetools==5.5.0          # In-memory memoizing collections (LRU, TTL caches) for caching results
-certifi==2024.8.30         # Mozilla’s curated CA bundle for verifying TLS certificates
+certifi==2024.8.30         # Mozilla's curated CA bundle for verifying TLS certificates
 charset-normalizer==3.4.0  # Encoding detector/normalizer used by HTTPX/requests
 colorama==0.4.6            # Cross-platform API for colored terminal text
 distro==1.9.0              # Detects Linux distribution name, version, and codename
 GPUtil==1.4.0              # Queries GPU status (utilization, memory) via NVIDIA-SMI
-google-ai-generativelanguage==0.6.10   # Client for Google’s AI Generative Language API
+google-ai-generativelanguage==0.6.10   # Client for Google's AI Generative Language API
 google-api-core==2.21.0    # Core functionality shared by Google Cloud client libraries
-google-api-python-client==2.149.0   # Auto-generated client for Google’s REST APIs
+google-api-python-client==2.149.0   # Auto-generated client for Google's REST APIs
 google-auth==2.35.0        # Authentication library for Google services (OAuth2, service accounts)
 google-auth-httplib2==0.2.0   # Integration between google-auth and httplib2 HTTP client
-google-generativeai==0.8.3 # High-level Python SDK for Google’s generative AI endpoints
+google-generativeai==0.8.3 # High-level Python SDK for Google's generative AI endpoints
 googleapis-common-protos==1.65.0  # Shared protobuf definitions used by Google API clients
-groq==0.11.0               # Python client for GROQ, Sanity.io’s JSON query language
+groq==0.11.0               # Python client for GROQ, Sanity.io's JSON query language
 grpcio==1.67.0             # Core gRPC library for high-performance RPC in Python
 grpcio-status==1.67.0      # Utilities for gRPC status codes and rich error details
 h11==0.14.0                # Pure-Python HTTP/1.1 protocol implementation
@@ -28,7 +28,7 @@ packaging==24.1            # Utilities for parsing/comparing versions, specifier
 pefile==2023.2.7           # Parser for Windows PE (Portable Executable) files
 pillow==11.0.0             # Friendly PIL fork for image processing
 proto-plus==1.25.0         # Pythonic wrapper around protobuf messages
-protobuf==5.28.3           # Google’s Protocol Buffers runtime library
+protobuf==5.28.3           # Google's Protocol Buffers runtime library
 pyasn1==0.6.1              # Pure-Python ASN.1 types and codecs
 pyasn1_modules==0.4.1      # Predefined ASN.1 specs for common protocols
 PyAutoGUI==0.9.54          # Cross-platform GUI automation (mouse & keyboard control)
