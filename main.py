@@ -12,7 +12,7 @@ import json
 import requests
 from resource_alerts_thread import ResourceAlertsThread
 from audio_manager import AudioManager
-from config import set_api_key, API_KEYS
+from config import AUTO_VILLAGER_BOOST_INTERVAL # Removed API_KEYS and set_api_key
 from utils import logger, show_popup_message
 from gui_layout import create_main_layout, resource_path
 from ai_analysis import AIAnalysis
@@ -77,11 +77,15 @@ class MainWindow(QWidget):
         self.activity_check_timer = None
         self.server_status_timer = None
         self.app_version = "1.0.0"  # Define the app version here
-        self.api_key_validated = False  # Add this line to track API key validation status
+        # self.api_key_validated = False # REMOVED
         
         # Initialize hotkeys before initUI
         self.villager_hotkey = "1"  # Default hotkey
         self.castle_hotkey = "2"  # Default castle hotkey
+
+        # Initialize auto villager boost timer
+        self.auto_villager_boost_timer = QTimer(self)
+        self.auto_villager_boost_timer.timeout.connect(self.trigger_automatic_villager_boost)
         
         self.initUI()
         self.setup_message_update()
@@ -117,32 +121,32 @@ class MainWindow(QWidget):
         existing_layout = create_main_layout(self)
         layout.addLayout(existing_layout)
         
-        # Add API key status icon
-        self.api_key_status_icon = QLabel(self)
-        self.api_key_status_icon.setFixedSize(16, 16)
+        # Add API key status icon (REMOVED)
+        # self.api_key_status_icon = QLabel(self)
+        # self.api_key_status_icon.setFixedSize(16, 16)
         
-        # Find the API key layout and add the status icon
-        for i in range(existing_layout.count()):
-            item = existing_layout.itemAt(i)
-            if isinstance(item, QHBoxLayout):
-                if item.itemAt(0).widget().text() == "Google LLM API Key:":
-                    item.addWidget(self.api_key_status_icon)
-                    break
+        # Find the API key layout and add the status icon (REMOVED)
+        # for i in range(existing_layout.count()):
+        #     item = existing_layout.itemAt(i)
+        #     if isinstance(item, QHBoxLayout):
+        #         if item.itemAt(0).widget().text() == "Google LLM API Key:":
+        #             item.addWidget(self.api_key_status_icon)
+        #             break
         
-        # Add LLM API status indicator
-        self.llm_api_status_layout = self.create_llm_api_status_layout()
-        layout.addLayout(self.llm_api_status_layout)
+        # Add LLM API status indicator (REMOVED - Ollama status is now primary)
+        # self.llm_api_status_layout = self.create_llm_api_status_layout()
+        # self.general_tab_layout.addLayout(self.llm_api_status_layout) 
 
         # Add Ollama status indicator
         self.ollama_status_layout = self.create_ollama_status_layout()
-        layout.addLayout(self.ollama_status_layout)
+        self.general_tab_layout.addLayout(self.ollama_status_layout) # Moved to general_tab_layout
         
         # Add server status indicator
         self.server_status_layout = self.create_server_status_layout()
-        layout.addLayout(self.server_status_layout)
+        self.general_tab_layout.addLayout(self.server_status_layout) # Moved to general_tab_layout
         
-        # Add message display area
-        self.create_message_area(layout)
+        # Add message display area to the general tab
+        self.create_message_area(self.general_tab_layout) # Pass general_tab_layout
         
         # Add version display at the bottom as a clickable link
         self.version_label = QLabel(f'<a href="https://wolologpt.com/?utm_source=program&utm_medium=app_link">Version: {self.app_version}</a>')
@@ -168,8 +172,8 @@ class MainWindow(QWidget):
         # Disable Start button by default
         self.start_button.setEnabled(False)
 
-        # Hide the API key status icon initially
-        self.api_key_status_icon.hide()
+        # Hide the API key status icon initially (REMOVED)
+        # self.api_key_status_icon.hide()
 
     def create_user_info_layout(self):
         """Create the user info input layout"""
@@ -215,15 +219,16 @@ class MainWindow(QWidget):
         llm_api_status_layout.addStretch()
         
         return llm_api_status_layout
+    # def create_llm_api_status_layout(self): # Method will be removed later if this was its only use
 
-    def create_message_area(self, layout):
+    def create_message_area(self, target_layout): # Modified to accept target_layout
         """Create the message display area"""
         self.message_area = QTextBrowser()
         self.message_area.setReadOnly(True)
         self.message_area.setMaximumHeight(100)
         self.message_area.setOpenExternalLinks(True)
-        layout.addWidget(QLabel("Updates and News:"))
-        layout.addWidget(self.message_area)
+        target_layout.addWidget(QLabel("Updates and News:")) # Use target_layout
+        target_layout.addWidget(self.message_area) # Use target_layout
 
     def connect_signals(self):
         """Connect signals to their respective slots"""
@@ -237,11 +242,16 @@ class MainWindow(QWidget):
         self.teammates_usernames_save_button.clicked.connect(self.save_teammates_usernames)
         self.audio_alerts_checkbox.stateChanged.connect(self.toggle_audio_alerts)
         self.idle_villager_audio_checkbox.stateChanged.connect(self.toggle_idle_villager_audio)
-        self.api_key_test_button.clicked.connect(self.test_api_key)
+        # self.api_key_test_button.clicked.connect(self.test_api_key) # REMOVED
         self.villager_hotkey_input.textChanged.connect(self.update_villager_hotkey)
         self.castle_hotkey_input.textChanged.connect(self.update_castle_hotkey)
         self.villager_hotkey_input.installEventFilter(self)
         self.castle_hotkey_input.installEventFilter(self)
+        # Connect the new checkbox signal
+        if hasattr(self, 'auto_villager_boost_checkbox'): # Ensure checkbox was created
+            self.auto_villager_boost_checkbox.stateChanged.connect(self.toggle_auto_villager_boost)
+        else:
+            logger.error("auto_villager_boost_checkbox not found during connect_signals. UI might be inconsistent.")
 
     def setup_message_update(self):
         """Set up periodic message updates"""
@@ -269,12 +279,14 @@ class MainWindow(QWidget):
 
     def start_resource_alerts(self):
         """Start the resource alerts thread and activity check timer"""
-        if not self.api_key_input.text():
-            show_popup_message("API Key Required", "Please enter a valid LLM API key before starting resource alerts.")
-            return
+        # API key check removed - start condition now primarily depends on Ollama status (checked by update_start_button_text)
+        # if not self.api_key_input.text():
+        #     show_popup_message("API Key Required", "Please enter a valid LLM API key before starting resource alerts.")
+        #     return
 
         if self.resource_alerts_thread is None or not self.resource_alerts_thread.isRunning():
-            self.resource_alerts_thread = ResourceAlertsThread(API_KEYS["GOOGLE"])
+            # ResourceAlertsThread no longer takes api_key
+            self.resource_alerts_thread = ResourceAlertsThread() 
             self.resource_alerts_thread.color_flash_signal.connect(self.show_color_flash)
             logger.debug("Color flash signal connected")
         self.resource_alerts_thread.enable_color_flash(self.color_flash_checkbox.isChecked())
@@ -288,6 +300,12 @@ class MainWindow(QWidget):
 
         # Log the action
         api_client.create_action("start_resource_alerts", "User started resource alerts")
+        
+        # Start auto villager boost timer if enabled
+        if hasattr(self, 'auto_villager_boost_checkbox') and self.auto_villager_boost_checkbox.isChecked():
+            if not self.auto_villager_boost_timer.isActive():
+                self.auto_villager_boost_timer.start(AUTO_VILLAGER_BOOST_INTERVAL * 1000)
+                logger.info(f"Automatic villager boost timer started alongside resource alerts. Interval: {AUTO_VILLAGER_BOOST_INTERVAL}s")
 
     def stop_resource_alerts(self):
         """Stop the resource alerts thread and activity check timer"""
@@ -299,6 +317,11 @@ class MainWindow(QWidget):
 
         # Stop the activity check timer
         self.stop_activity_check_timer()
+
+        # Stop auto villager boost timer
+        if self.auto_villager_boost_timer.isActive():
+            self.auto_villager_boost_timer.stop()
+            logger.info("Automatic villager boost timer stopped because resource alerts stopped.")
 
         # Log the action
         api_client.create_action("stop_resource_alerts", "User stopped resource alerts")
@@ -342,6 +365,46 @@ class MainWindow(QWidget):
             GameActions.disable_villager_creation()
             api_client.create_action("disable_villager_creation", "User disabled auto villager creation")
         self.setup_hotkeys()
+
+    def trigger_automatic_villager_boost(self):
+        if not hasattr(self, 'auto_villager_boost_checkbox') or \
+           not hasattr(self, 'resource_alerts_thread') or \
+           not self.resource_alerts_thread or \
+           not self.resource_alerts_thread.isRunning():
+            # Don't run if UI elements aren't ready or main alerts aren't active
+            return
+
+        if self.auto_villager_boost_checkbox.isChecked():
+            logger.info("Automatic villager boost check triggered by timer.")
+            try:
+                GameActions.auto_create_villagers_to_target()
+            except Exception as e:
+                logger.error(f"Error during automatic villager boost trigger: {e}", exc_info=True)
+        else:
+            # If the checkbox got unchecked, ensure the timer is stopped
+            # This is a defensive check; primary stop logic is in toggle_auto_villager_boost
+            if self.auto_villager_boost_timer.isActive():
+                self.auto_villager_boost_timer.stop()
+                logger.info("Automatic villager boost timer stopped because checkbox is unchecked (during trigger check).")
+
+    def toggle_auto_villager_boost(self, state):
+        if state == Qt.CheckState.Checked.value:
+            if self.resource_alerts_thread and self.resource_alerts_thread.isRunning():
+                if not self.auto_villager_boost_timer.isActive():
+                    self.auto_villager_boost_timer.start(AUTO_VILLAGER_BOOST_INTERVAL * 1000) # Convert seconds to ms
+                    logger.info(f"Automatic villager boost timer started. Interval: {AUTO_VILLAGER_BOOST_INTERVAL}s")
+                api_client.create_action("enable_auto_villager_boost", "User enabled automatic villager boost")
+            else:
+                # Prevent enabling if resource alerts are not running
+                logger.info("Automatic villager boost cannot start because resource alerts are not active.")
+                show_popup_message("Auto Boost Info", "Start resource alerts to enable automatic villager boost.")
+                if hasattr(self, 'auto_villager_boost_checkbox'):
+                    self.auto_villager_boost_checkbox.setChecked(False) # Revert checkbox
+        else:
+            if self.auto_villager_boost_timer.isActive():
+                self.auto_villager_boost_timer.stop()
+                logger.info("Automatic villager boost timer stopped.")
+            api_client.create_action("disable_auto_villager_boost", "User disabled automatic villager boost")
 
     def toggle_civ_counters_hotkey(self, state):
         """Toggle the civilization counters hotkey"""
@@ -388,6 +451,22 @@ class MainWindow(QWidget):
                     self.teammates_usernames_input.text()
                 ))
             
+            # New hotkey for auto_create_villagers_to_target
+            if self.villager_checkbox.isChecked(): # Also tie the new boost hotkey to this checkbox
+                try:
+                    # API_KEYS is imported at the module level. The call to auto_create_villagers_to_target no longer needs it.
+                    action_to_run = lambda: GameActions.auto_create_villagers_to_target() # Argument removed
+                    keyboard.add_hotkey('ctrl+alt+v', action_to_run)
+                    logger.info("Auto villager boost hotkey 'ctrl+alt+v' enabled.")
+                except Exception as e:
+                    logger.error(f"Failed to add auto villager boost hotkey 'ctrl+alt+v': {str(e)}")
+            else:
+                try:
+                    keyboard.remove_hotkey('ctrl+alt+v') # Attempt to remove if checkbox is unchecked
+                    logger.info("Auto villager boost hotkey 'ctrl+alt+v' disabled (checkbox unchecked).")
+                except Exception: # keyboard.remove_hotkey might fail if not set, which is fine.
+                    pass # No need to log an error if it wasn't there to be removed.
+            
             logger.info(f"Hotkeys set up successfully. Villager hotkey: {self.villager_hotkey}, Castle hotkey: {self.castle_hotkey}")
         except Exception as e:
             logger.error(f"Error setting up hotkeys: {str(e)}")
@@ -397,11 +476,12 @@ class MainWindow(QWidget):
         user_info = {
             "your_username": self.your_username_input.text(),
             "teammates_usernames": self.teammates_usernames_input.text(),
-            "api_key": self.api_key_input.text(),
+            # "api_key": self.api_key_input.text(), # REMOVED
             "audio_alerts_enabled": self.audio_alerts_checkbox.isChecked(),
             "idle_villager_audio_enabled": self.idle_villager_audio_checkbox.isChecked(),
             "villager_hotkey": self.villager_hotkey,
-            "castle_hotkey": self.castle_hotkey
+            "castle_hotkey": self.castle_hotkey,
+            "auto_villager_boost_enabled": self.auto_villager_boost_checkbox.isChecked(), # Added
         }
         with open("user_info.json", "w") as f:
             json.dump(user_info, f)
@@ -416,8 +496,8 @@ class MainWindow(QWidget):
                 user_info = json.load(f)
                 self.your_username_input.setText(user_info.get("your_username", ""))
                 self.teammates_usernames_input.setText(user_info.get("teammates_usernames", ""))
-                api_key = user_info.get("api_key", "")
-                self.api_key_input.setText(api_key)
+                # api_key = user_info.get("api_key", "") # REMOVED
+                # self.api_key_input.setText(api_key) # REMOVED (api_key_input widget also removed from gui_layout)
                 
                 # Load checkbox states
                 self.audio_alerts_checkbox.setChecked(user_info.get("audio_alerts_enabled", True))
@@ -428,68 +508,71 @@ class MainWindow(QWidget):
                 self.villager_hotkey_input.setText(self.villager_hotkey)
                 self.castle_hotkey = user_info.get("castle_hotkey", "2")
                 self.castle_hotkey_input.setText(self.castle_hotkey)
+
+                # Load auto villager boost checkbox state
+                self.auto_villager_boost_checkbox.setChecked(user_info.get("auto_villager_boost_enabled", False)) # Added
                 
-                # Don't validate the API key automatically
-                self.api_key_validated = False
-                self.update_api_key_status(False)
-                self.update_llm_api_status(False)
+                # Don't validate the API key automatically (REMOVED)
+                # self.api_key_validated = False 
+                # self.update_api_key_status(False) # REMOVED
+                # self.update_llm_api_status(False) # REMOVED
                 # self.update_start_button_text() # This will be called by check_ollama_status
                 
             self.setup_hotkeys()
         except FileNotFoundError:
             logger.warning("user_info.json not found")
 
-    def verify_and_update_api_key(self, api_key):
-        """Verify the API key and update its status"""
-        is_valid, message = AIAnalysis.test_google_api_key(api_key)
-        if is_valid:
-            set_api_key(api_key)
-            self.update_api_key_status(True)
-            self.update_llm_api_status(True)
-            if self.resource_alerts_thread:
-                self.resource_alerts_thread.api_key = api_key
-            show_popup_message("API Key Verified", "Your Google API key has been verified successfully.")
-            self.start_button.setEnabled(True)
-            self.api_key_validated = True
-            self.update_start_button_text()
-            self.api_key_status_icon.show()  # Show the icon after successful validation
-        else:
-            self.update_api_key_status(False)
-            self.update_llm_api_status(False)
-            show_popup_message("API Key Error", f"Failed to verify API key: {message}")
-            # self.start_button.setEnabled(False) # Managed by update_start_button_text
-            self.stop_button.setEnabled(False)
-            self.api_key_validated = False
-            self.update_start_button_text() # This will consider Ollama status too
-            self.api_key_status_icon.hide()  # Hide the icon if validation fails
+    # def verify_and_update_api_key(self, api_key): # REMOVED
+    #     """Verify the API key and update its status"""
+    #     is_valid, message = AIAnalysis.test_google_api_key(api_key)
+    #     if is_valid:
+    #         set_api_key(api_key)
+    #         self.update_api_key_status(True)
+    #         self.update_llm_api_status(True)
+    #         if self.resource_alerts_thread:
+    #             self.resource_alerts_thread.api_key = api_key
+    #         show_popup_message("API Key Verified", "Your Google API key has been verified successfully.")
+    #         self.start_button.setEnabled(True)
+    #         self.api_key_validated = True
+    #         self.update_start_button_text()
+    #         self.api_key_status_icon.show()  # Show the icon after successful validation
+    #     else:
+    #         self.update_api_key_status(False)
+    #         self.update_llm_api_status(False)
+    #         show_popup_message("API Key Error", f"Failed to verify API key: {message}")
+    #         # self.start_button.setEnabled(False) # Managed by update_start_button_text
+    #         self.stop_button.setEnabled(False)
+    #         self.api_key_validated = False
+    #         self.update_start_button_text() # This will consider Ollama status too
+    #         self.api_key_status_icon.hide()  # Hide the icon if validation fails
 
-    def update_api_key_status(self, is_valid):
-        """Update the API key status icon"""
-        if is_valid:
-            icon_path = resource_path("images/check.png")
-            icon = QIcon(icon_path)
-            self.api_key_status_icon.setStyleSheet("background-color: #90EE90;")
-            self.api_key_status_icon.show()
-        else:
-            icon_path = resource_path("images/x.png")
-            icon = QIcon(icon_path)
-            self.api_key_status_icon.setStyleSheet("background-color: #FFB6C1;")
-            self.api_key_status_icon.hide()
+    # def update_api_key_status(self, is_valid): # REMOVED
+    #     """Update the API key status icon"""
+    #     if is_valid:
+    #         icon_path = resource_path("images/check.png")
+    #         icon = QIcon(icon_path)
+    #         self.api_key_status_icon.setStyleSheet("background-color: #90EE90;")
+    #         self.api_key_status_icon.show()
+    #     else:
+    #         icon_path = resource_path("images/x.png")
+    #         icon = QIcon(icon_path)
+    #         self.api_key_status_icon.setStyleSheet("background-color: #FFB6C1;")
+    #         self.api_key_status_icon.hide()
 
-        if icon.isNull():
-            print(f"Failed to load icon from: {icon_path}")
-        else:
-            pixmap = icon.pixmap(16, 16)
-            self.api_key_status_icon.setPixmap(pixmap)
+    #     if icon.isNull():
+    #         print(f"Failed to load icon from: {icon_path}")
+    #     else:
+    #         pixmap = icon.pixmap(16, 16)
+    #         self.api_key_status_icon.setPixmap(pixmap)
 
-    def update_llm_api_status(self, is_valid):
-        """Update the LLM API status indicator"""
-        if is_valid:
-            self.llm_api_status_indicator.setStyleSheet("background-color: #90EE90; border-radius: 8px;")
-            self.llm_api_status_indicator.setToolTip("LLM API is online")
-        else:
-            self.llm_api_status_indicator.setStyleSheet("background-color: #FFB6C1; border-radius: 8px;")
-            self.llm_api_status_indicator.setToolTip("LLM API is offline")
+    # def update_llm_api_status(self, is_valid): # REMOVED
+    #     """Update the LLM API status indicator"""
+    #     if is_valid:
+    #         self.llm_api_status_indicator.setStyleSheet("background-color: #90EE90; border-radius: 8px;")
+    #         self.llm_api_status_indicator.setToolTip("LLM API is online")
+    #     else:
+    #         self.llm_api_status_indicator.setStyleSheet("background-color: #FFB6C1; border-radius: 8px;")
+    #         self.llm_api_status_indicator.setToolTip("LLM API is offline")
 
     def toggle_color_flash_alerts(self, state):
         """Toggle the color flash alerts feature"""
@@ -592,11 +675,11 @@ class MainWindow(QWidget):
             self.resource_alerts_thread.enable_idle_villager_audio(enabled)
         api_client.create_action("toggle_idle_villager_audio", f"User {'enabled' if enabled else 'disabled'} idle villager audio alert")
 
-    def test_api_key(self):
-        """Test the API key"""
-        api_key = self.api_key_input.text()
-        self.verify_and_update_api_key(api_key)
-        self.save_user_info()
+    # def test_api_key(self): # REMOVED
+    #     """Test the API key"""
+    #     api_key = self.api_key_input.text()
+    #     self.verify_and_update_api_key(api_key)
+    #     self.save_user_info()
 
     def update_villager_hotkey(self, new_hotkey):
         if new_hotkey:
@@ -642,17 +725,17 @@ class MainWindow(QWidget):
     def update_start_button_text(self):
         ollama_ok = hasattr(self, 'ollama_status_indicator') and self.ollama_status_indicator.toolTip() == "Ollama Connected"
         
-        if self.api_key_validated and ollama_ok:
+        if ollama_ok: # Simplified: only depends on Ollama status
             self.start_button.setText("Start Resource Alerts")
             self.start_button.setEnabled(True)
-        elif not self.api_key_validated:
-            self.start_button.setText("Activate API Key First")
-            self.start_button.setEnabled(False)
-        elif not ollama_ok:
+        # elif not self.api_key_validated: # REMOVED
+        #     self.start_button.setText("Activate API Key First")
+        #     self.start_button.setEnabled(False)
+        elif not ollama_ok: # This condition is technically covered by the else, but kept for clarity
             self.start_button.setText("Check Ollama Status")
             self.start_button.setEnabled(False)
-        else: # Default fallback
-            self.start_button.setText("Waiting for API and Ollama...")
+        else: # Default fallback, effectively means not ollama_ok
+            self.start_button.setText("Check Ollama Status") # Changed from "Waiting for API and Ollama..."
             self.start_button.setEnabled(False)
 
     def create_ollama_status_layout(self):

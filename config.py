@@ -34,14 +34,14 @@ AI_CONFIG = {
     }
 }
 
-# API keys are kept for backward compatibility
-API_KEYS = {
-    "GROQ": "",
-    "GOOGLE": ""  # This will be set by the user
-}
+# API keys are kept for backward compatibility (REMOVED)
+# API_KEYS = {
+#     "GROQ": "",
+#     "GOOGLE": ""  # This will be set by the user
+# }
 
-def set_api_key(key):
-    API_KEYS["GOOGLE"] = key
+# def set_api_key(key): (REMOVED)
+#     API_KEYS["GOOGLE"] = key
 
 AUDIO_VOLUME = 0.35
 
@@ -192,6 +192,8 @@ CIV_COUNTER_PROMPT = load_prompt_from_file(CIV_COUNTER_PROMPT_PATH, get_default_
 RESOURCE_CHECK_INTERVAL = 15  # seconds
 VILLAGER_WARNING_INTERVAL = 50  # seconds
 OLLAMA_CONNECTION_RETRY_INTERVAL = 30  # seconds
+# Interval in seconds for the automatic villager boost check
+AUTO_VILLAGER_BOOST_INTERVAL = 60 
 
 # Paths to data files
 COUNTERS_DATA_PATH = resource_path('counters_data/aoe2_counter_unique_gemini.json')

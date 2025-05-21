@@ -2,7 +2,7 @@ from PyQt6.QtCore import QThread, pyqtSignal, QObject
 from screenshot_manager import ScreenshotManager
 from ai_analysis import AIAnalysis
 from audio_manager import AudioManager
-from config import RESOURCE_CHECK_PROMPT, RESOURCE_CHECK_INTERVAL, VILLAGER_WARNING_INTERVAL
+from config import RESOURCE_CHECK_PROMPT, RESOURCE_CHECK_INTERVAL, VILLAGER_WARNING_INTERVAL, AI_CONFIG # Added AI_CONFIG
 from utils import logger
 import json
 import time
@@ -14,13 +14,13 @@ class ResourceAlertsThread(QThread):
     alert_signal = pyqtSignal(str)
     color_flash_signal = pyqtSignal(str, float, tuple, tuple, float, str)
 
-    def __init__(self, api_key):
+    def __init__(self): # api_key parameter removed
         super().__init__()
         self.running = False
         self.audio_queue = Queue()
         self.color_flash_queue = Queue()
         self.last_villager_check_time = 0
-        self.api_key = api_key
+        # self.api_key = api_key # Line removed
         self.color_flash_enabled = True
         self.audio_alerts_enabled = True
         self.idle_villager_audio_enabled = True
@@ -29,7 +29,15 @@ class ResourceAlertsThread(QThread):
         """Main loop for resource alerts"""
         while self.running:
             screenshot_path = ScreenshotManager.take_resource_screenshot()
-            resources = AIAnalysis.analyze_image_gemini(screenshot_path, RESOURCE_CHECK_PROMPT, self.api_key)
+            
+            ollama_model_name = AI_CONFIG.get("default_models", {}).get("image")
+            if not ollama_model_name:
+                logger.error("Ollama image model name not found in config for ResourceAlertsThread. Skipping analysis cycle.")
+                # Sleep for the normal interval before trying again or stopping if not running
+                time.sleep(RESOURCE_CHECK_INTERVAL) 
+                continue # Skip to the next iteration of the while loop
+
+            resources = AIAnalysis.analyze_image_ollama(screenshot_path, RESOURCE_CHECK_PROMPT, ollama_model_name)
             
             # Track the resource check
             api_client.create_action("resource_check", "Resource check performed")
